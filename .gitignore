@@ -70,3 +70,15 @@ vendor/
 coverage/
 .cache/
 tmp/
+
+# ── Local agent/helper files not intended for sync ──
+.bg-shell/
+.holistic/
+.cursorrules
+.windsurfrules
+CLAUDE.md
+GEMINI.md
+HISTORY.md
+MainActivity.kt
+.gitattributes
+.github/copilot-instructions.md
