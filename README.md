@@ -1,58 +1,16 @@
 # PayDirt
 
-PayDirt is an Android app that helps people decide where a small extra credit card payment will do the most good.
+PayDirt is an Android app built around one useful question:
 
-If someone has an extra $5, $10, or $25, the app should answer a simple question:
+**If I have a little extra money, which credit card payment does the most good right now?**
 
-**Which payment creates the best payoff outcome from here?**
+If someone has an extra $5, $10, or $25, PayDirt should point to the right move, explain why it matters, and make the payoff feel concrete.
 
-Debt is math, not shame. PayDirt is meant to feel calm, direct, and useful. The goal is not to flood people with dashboards or motivational language. The goal is to show the right move, explain why it matters, and make progress easier to see.
+> Debt is math, not shame.
 
-## What The App Does
+That is the product philosophy in one line.
 
-Today, the app already supports the core manual payoff-planning flow:
-
-- add and edit credit cards
-- view balances, APR, and minimum payments
-- log payments
-- view card detail and payment history
-- generate payoff recommendations
-- compare avalanche, snowball, and hybrid payoff strategies
-
-The longer-term product direction adds a stronger behavior loop around that core:
-
-- show the best next move
-- make that move easy to act on
-- reflect the payoff in concrete terms
-- bring the user back with another clear next step
-
-## Current Status
-
-This repository is a working Android app with a usable MVP foundation.
-
-What is already in place:
-
-- Jetpack Compose UI
-- Hilt dependency injection
-- Room persistence
-- home dashboard
-- optimizer flow
-- manual card management
-- payment logging
-- payoff engine tests
-
-What is partially built or scaffolded but not fully wired into the main experience yet:
-
-- reward screen flow
-- behavior engine surfaces
-- Plaid-linked account flow
-- background refresh scheduling
-- re-auth UX
-- onboarding flow from the product spec
-
-## Product Direction
-
-The product tone in the spec is a good summary of what PayDirt is trying to be:
+PayDirt is meant to feel:
 
 - calm
 - direct
@@ -60,30 +18,145 @@ The product tone in the spec is a good summary of what PayDirt is trying to be:
 - specific
 - lightly elegant
 
-That shows up in lines like:
+It is **not** trying to become a giant finance dashboard, a guilt machine, or a motivational app pretending to be a calculator.
 
-- "Debt is math, not shame."
-- "Small hits, right target."
-- "Connect once. Let it run."
+## Why It Exists
 
-It also means avoiding a lot of typical finance-app language:
+A lot of debt tools either overwhelm people with charts or flatten everything into generic encouragement.
+
+PayDirt is trying to do something simpler and sharper:
+
+- show the best next move
+- show what that move changes
+- make progress visible in real terms
+- give the user another clear next step
+
+The core value is straightforward:
+
+**PayDirt should make the next best debt-payoff move clear, grounded, and easy to act on.**
+
+## Current State
+
+This repo already contains a working Android app with a meaningful manual payoff-planning foundation.
+
+What works today:
+
+- manual card add and edit flow
+- card detail view
+- payment logging
+- local persistence with Room
+- payoff recommendations
+- strategy comparison across avalanche, snowball, and hybrid approaches
+- payoff engine unit tests
+- Compose-based app shell and navigation
+
+This is already beyond prototype territory. The app does real work today.
+
+What exists in code but is not fully assembled into the main experience yet:
+
+- reward screen flow
+- behavior engine surfaces
+- APR confidence UI
+- onboarding / first recommendation reveal
+- Plaid-linked account flow
+- background refresh scheduling from app lifecycle
+- re-auth recovery UX
+
+So the current job is not to invent the app from scratch. It is to assemble the strongest existing parts into a product that feels complete.
+
+## What The App Should Feel Like
+
+PayDirt should help without performing help.
+
+That means:
 
 - no shame
 - no fake cheerleading
 - no streak pressure
 - no vague "take control of your future" copy
+- no dashboard sprawl that hides the next useful action
 
-## Key Screens
+Good language for this product sounds like:
 
-The current app experience centers on a few core screens:
+- "Debt is math, not shame."
+- "Small hits, right target."
+- "Connect once. Let it run."
 
-- Home: total debt, card list, and a quick recommendation
-- Card Detail: individual card progress and payment history
-- Add / Edit Card: fast manual entry for the key payoff inputs
-- Optimizer: compare payoff strategies and see the best target
-- Reward Screen: built in code and ready to be wired into the main flow
+## Core Screens
 
-Once we have stable device screenshots, this section should be replaced or expanded with images from the real app.
+The current in-app experience centers on:
+
+- **Home** — debt overview and a quick recommendation
+- **Card Detail** — card progress and payment history
+- **Add / Edit Card** — manual entry for payoff-critical inputs
+- **Optimizer** — strategy comparison and target selection
+- **Reward Screen** — already built in code and intended to become part of the main payment loop
+
+## Roadmap
+
+The project is currently sequenced into five milestones.
+
+### M001 — Core Android Product Loop
+Turn the existing app into a coherent, satisfying manual payoff experience.
+
+Focus:
+- wire reward flow after payment logging
+- improve home progress and next-move surfaces
+- add manual-user onboarding / first recommendation reveal
+- add goal framing and behavior surfaces
+- surface trust cues like APR confidence where they matter
+
+### M002 — Linked Accounts and Live Data
+Make Plaid-backed account linking, refresh, and re-auth work end-to-end.
+
+Focus:
+- Plaid Link UI and token exchange
+- linked account management
+- refresh scheduling
+- re-auth detection and recovery
+- recommendation updates from live data
+
+### M003 — Website and Launch Web Presence
+Build the simple public-facing launch site for PayDirt.
+
+Focus:
+- straightforward marketing page
+- trust and explanatory content
+- clear app / store CTA paths
+- optional launch-interest signup
+
+This is intentionally a **small website**, not a second product.
+
+### M004 — Google Play Readiness and Submission
+Prepare the app for testing tracks and eventual Play submission.
+
+Focus:
+- release config and signing
+- store listing assets and copy
+- privacy / policy / compliance readiness
+- QA on launch-critical flows
+- submission support
+
+### M005 — Intelligence and Retention
+Make PayDirt smarter and more useful over time once the base product is stable.
+
+Focus:
+- smarter recommendation inputs
+- grounded momentum / progress surfaces
+- payoff forecasting
+- restrained, opt-in return loops
+
+## Why The Sequence Looks Like This
+
+The order is intentional:
+
+1. make the app feel real
+2. make linked data real
+3. build the simple launch website
+4. prepare the store release path
+5. add deeper intelligence and retention
+
+That keeps the work anchored to actual product value instead of chasing launch packaging before the app experience is strong enough.
 
 ## Tech Stack
 
@@ -101,16 +174,18 @@ Once we have stable device screenshots, this section should be replaced or expan
 
 ## Project Layout
 
-- [`app/src/main/java/com/lweiss01/paydirt/data`](app/src/main/java/com/lweiss01/paydirt/data)
+- [`app/src/main/java/com/lweiss01/paydirt/data`](app/src/main/java/com/lweiss01/paydirt/data)  
   Data layer: Room entities, DAOs, repositories, and remote API contracts
-- [`app/src/main/java/com/lweiss01/paydirt/domain`](app/src/main/java/com/lweiss01/paydirt/domain)
+- [`app/src/main/java/com/lweiss01/paydirt/domain`](app/src/main/java/com/lweiss01/paydirt/domain)  
   Business logic: payoff engine, behavior engine, APR logic, models, and use cases
-- [`app/src/main/java/com/lweiss01/paydirt/ui`](app/src/main/java/com/lweiss01/paydirt/ui)
+- [`app/src/main/java/com/lweiss01/paydirt/ui`](app/src/main/java/com/lweiss01/paydirt/ui)  
   Compose UI: screens, navigation, components, and theme
-- [`app/src/main/java/com/lweiss01/paydirt/work`](app/src/main/java/com/lweiss01/paydirt/work)
+- [`app/src/main/java/com/lweiss01/paydirt/work`](app/src/main/java/com/lweiss01/paydirt/work)  
   Background refresh work
-- [`app/src/test`](app/src/test)
+- [`app/src/test`](app/src/test)  
   Unit tests
+- [`.gsd`](.gsd)  
+  Planning and execution artifacts for milestone, requirement, and roadmap management
 
 ## Running The App
 
@@ -134,7 +209,7 @@ Run unit tests:
 
 ## Plaid / Backend Notes
 
-The Android app includes a Plaid-ready repository and API contract, but it still expects a backend to handle secure token exchange and linked-account refresh.
+The Android app already includes Plaid-oriented repository and API scaffolding, but it still expects a backend to handle secure financial integration concerns.
 
 That backend is intended to:
 
@@ -145,24 +220,28 @@ That backend is intended to:
 
 The current debug base URL is configured in [`Modules.kt`](app/src/main/java/com/lweiss01/paydirt/di/Modules.kt).
 
-## Roadmap
+## Planning Files
 
-- [`ROADMAP.md`](ROADMAP.md) tracks the broader product phases
-- [`MILESTONES.md`](MILESTONES.md) turns that into a build checklist
-- [`CONTRIBUTING.md`](CONTRIBUTING.md) explains how to contribute in a way that fits the product
+If you want the current execution plan rather than the product overview, start here:
 
-The short version:
+- [`.gsd/PROJECT.md`](.gsd/PROJECT.md)
+- [`.gsd/REQUIREMENTS.md`](.gsd/REQUIREMENTS.md)
+- [`.gsd/DECISIONS.md`](.gsd/DECISIONS.md)
+- [`.gsd/milestones/M001/M001-CONTEXT.md`](.gsd/milestones/M001/M001-CONTEXT.md)
+- [`.gsd/milestones/M001/M001-ROADMAP.md`](.gsd/milestones/M001/M001-ROADMAP.md)
 
-- Phase 1 focuses on foundation, live data, and the reward loop
-- Phase 2 focuses on intelligence and retention
-- Phase 3 focuses on advanced payoff tools
-- Phase 4 focuses on launch polish
+Older planning context also exists here:
+
+- [`ROADMAP.md`](ROADMAP.md)
+- [`MILESTONES.md`](MILESTONES.md)
+- [`CONTRIBUTING.md`](CONTRIBUTING.md)
 
 ## Development Notes
 
 - Room schema export is enabled and written to [`app/schemas`](app/schemas)
 - The repo currently contains both the usable manual-entry path and the in-progress live-data path
-- The codebase is further along than a prototype, but not yet at full product-spec completion
+- The codebase is further along than a prototype, but not yet at full product completion
+- Current planning assumes the website remains simple and marketing-focused, not feature-heavy
 
 ## License
 
