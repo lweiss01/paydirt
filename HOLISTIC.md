@@ -34,7 +34,7 @@ Capture work and prepare a clean handoff.
 
 ## Latest Work Status
 
-Committed: docs: bootstrap GSD planning and refresh README
+Committed: docs: sync repo agent instructions
 
 ## What Was Tried
 
@@ -98,6 +98,6 @@ Committed: docs: bootstrap GSD planning and refresh README
 
 ## Historical Memory
 
-- Last updated: 2026-03-25T21:04:41.691Z
+- Last updated: 2026-03-25T21:07:40.454Z
 - Last handoff: None yet.
 - Pending sessions remembered: 0
