@@ -6,7 +6,7 @@ Capture work and prepare a clean handoff.
 
 ## Latest Status
 
-Committed: docs: bootstrap GSD planning and refresh README
+Committed: docs: sync repo agent instructions
 
 ## Planned Next Steps
 
