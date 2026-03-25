@@ -1,0 +1,81 @@
+package com.lweiss01.paydirt.ui.navigation
+
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.lweiss01.paydirt.ui.screens.cards.AddEditCardScreen
+import com.lweiss01.paydirt.ui.screens.cards.CardDetailScreen
+import com.lweiss01.paydirt.ui.screens.home.HomeScreen
+import com.lweiss01.paydirt.ui.screens.optimizer.OptimizerScreen
+
+sealed class Screen(val route: String) {
+    object Home       : Screen("home")
+    object Optimizer  : Screen("optimizer")
+    object AddCard    : Screen("add_card")
+    object EditCard   : Screen("edit_card/{cardId}") {
+        fun createRoute(cardId: Long) = "edit_card/$cardId"
+    }
+    object CardDetail : Screen("card_detail/{cardId}") {
+        fun createRoute(cardId: Long) = "card_detail/$cardId"
+    }
+}
+
+@Composable
+fun PayDirtNavGraph(
+    navController: NavHostController = rememberNavController()
+) {
+    NavHost(
+        navController = navController,
+        startDestination = Screen.Home.route
+    ) {
+        composable(Screen.Home.route) {
+            HomeScreen(
+                onAddCard        = { navController.navigate(Screen.AddCard.route) },
+                onCardClick      = { cardId -> navController.navigate(Screen.CardDetail.createRoute(cardId)) },
+                onOpenOptimizer  = { navController.navigate(Screen.Optimizer.route) }
+            )
+        }
+
+        composable(Screen.Optimizer.route) {
+            OptimizerScreen(
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(Screen.AddCard.route) {
+            AddEditCardScreen(
+                cardId = null,
+                onBack = { navController.popBackStack() },
+                onSaved = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Screen.EditCard.route,
+            arguments = listOf(navArgument("cardId") { type = NavType.LongType })
+        ) { backStack ->
+            val cardId = backStack.arguments?.getLong("cardId")
+            AddEditCardScreen(
+                cardId = cardId,
+                onBack = { navController.popBackStack() },
+                onSaved = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = Screen.CardDetail.route,
+            arguments = listOf(navArgument("cardId") { type = NavType.LongType })
+        ) { backStack ->
+            val cardId = backStack.arguments?.getLong("cardId") ?: return@composable
+            CardDetailScreen(
+                cardId = cardId,
+                onBack = { navController.popBackStack() },
+                onEdit = { navController.navigate(Screen.EditCard.createRoute(cardId)) }
+            )
+        }
+    }
+}

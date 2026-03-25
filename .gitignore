@@ -1,0 +1,33 @@
+# Android Studio / IntelliJ
+.idea/
+*.iml
+
+# Gradle / Kotlin
+.gradle/
+.kotlin/
+build/
+app/build/
+gradle/gradle-daemon-jvm.properties
+
+# Local machine configuration
+local.properties
+.DS_Store
+Thumbs.db
+
+# Native / generated build outputs
+.externalNativeBuild/
+.cxx/
+captures/
+
+# Packaged artifacts
+*.apk
+*.aab
+*.ap_
+
+# Signing material
+*.jks
+*.keystore
+keystore.properties
+
+# Logs
+*.log
