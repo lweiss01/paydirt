@@ -6,7 +6,7 @@ Capture work and prepare a clean handoff.
 
 ## Latest Status
 
-Committed: docs: sync repo agent instructions
+Committed: docs: refresh holistic status
 
 ## Planned Next Steps
 
