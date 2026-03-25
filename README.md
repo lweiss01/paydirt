@@ -1,32 +1,58 @@
 # PayDirt
 
-PayDirt is an Android app for credit card payoff planning. It helps users see where an extra payment will hit hardest, track balances and payments over time, and turn payoff math into a simple recommendation they can act on quickly.
+PayDirt is an Android debt-payoff app built around one question:
 
-This project is built as a native Android app with Jetpack Compose, Hilt, Room, and a small Plaid-ready networking layer. The product direction in this repo is based on the v3 product spec and focuses on a behavioral payoff loop: recommend the best move, help the user take it, and make the win feel concrete.
+**Where should the next dollar go to do the most damage?**
 
-## Current Status
+Instead of making payoff planning feel like homework, PayDirt is designed to show the best move, make it easy to act on, and turn progress into something users can actually feel. The long-term product vision is a behavioral payoff loop: recommendation, action, reward, repeat.
 
-The app is running and builds successfully with `:app:assembleDebug`.
+## Why PayDirt Exists
 
-What is implemented today:
+Credit card payoff apps usually do one of two things:
 
-- Home dashboard with total debt, card summaries, and a quick payoff recommendation
-- Manual card entry and editing flow
-- Card detail screen with payment history and payment logging
-- Payoff optimizer with avalanche, snowball, and hybrid strategies
-- Local persistence with Room
-- Dependency injection with Hilt
-- Compose navigation and custom app theme
-- Plaid-oriented data models, repository, worker, and API contract scaffolding
-- Room migration from schema version 1 to 2
+- act like spreadsheets with nicer fonts
+- push vague "stay motivated" advice without helping users make the next concrete move
 
-What is present in code but not fully wired end-to-end yet:
+PayDirt aims for a more useful middle ground:
 
-- Reward screen integration into the user flow
-- Behavior engine-driven feedback loop
-- Plaid linking UI and onboarding flow
-- Background refresh scheduling from app startup
-- Re-auth nudges and notification UX
+- show the best target right now
+- explain the payoff in plain language
+- keep manual entry fast
+- support live account linking as the product matures
+- make momentum visible without becoming cheesy
+
+## What The App Does Today
+
+The current Android app already supports a solid payoff-planning core:
+
+- manual card entry and editing
+- a home dashboard with total debt and a quick recommendation
+- card detail views
+- payment logging
+- payoff optimization with avalanche, snowball, and hybrid strategies
+- local persistence with Room
+- dependency injection with Hilt
+- Compose-based navigation and custom UI/theme work
+
+The repo also includes in-progress infrastructure for:
+
+- Plaid-linked account support
+- background refresh via WorkManager
+- Smart APR inference
+- reward-loop UI
+- behavior-driven retention features
+
+## Current Product Status
+
+This repository is best understood as:
+
+**A working MVP foundation with partial Phase 1 product work already in place.**
+
+That means:
+
+- the app builds and runs
+- the manual payoff planner is real and usable
+- several higher-level product systems are implemented in code but not fully wired into the main user flow yet
 
 ## Tech Stack
 
@@ -37,40 +63,37 @@ What is present in code but not fully wired end-to-end yet:
 - Hilt
 - Room
 - WorkManager
-- Retrofit + Gson
+- Retrofit
 - OkHttp
-- Vico charts
+- Gson
+- Vico
 
-## Package / App Info
+## Project Layout
 
-- Application ID: `com.lweiss01.paydirt`
-- Min SDK: `26`
-- Target SDK: `35`
-- Compile SDK: `35`
-
-## Project Structure
-
-The codebase is organized into a straightforward layered structure:
-
-- [`app/src/main/java/com/lweiss01/paydirt/data`](app/src/main/java/com/lweiss01/paydirt/data) for Room entities/DAOs, repositories, and remote API contracts
-- [`app/src/main/java/com/lweiss01/paydirt/domain`](app/src/main/java/com/lweiss01/paydirt/domain) for engines, models, and use cases
-- [`app/src/main/java/com/lweiss01/paydirt/ui`](app/src/main/java/com/lweiss01/paydirt/ui) for Compose screens, navigation, and theme
-- [`app/src/main/java/com/lweiss01/paydirt/work`](app/src/main/java/com/lweiss01/paydirt/work) for background refresh work
-- [`app/src/test`](app/src/test) for unit tests
+- [`app/src/main/java/com/lweiss01/paydirt/data`](app/src/main/java/com/lweiss01/paydirt/data)
+  Data layer: Room entities, DAOs, repositories, and remote API contracts
+- [`app/src/main/java/com/lweiss01/paydirt/domain`](app/src/main/java/com/lweiss01/paydirt/domain)
+  Business logic: payoff engine, behavior engine, APR logic, models, and use cases
+- [`app/src/main/java/com/lweiss01/paydirt/ui`](app/src/main/java/com/lweiss01/paydirt/ui)
+  Compose UI: screens, navigation, components, and theme
+- [`app/src/main/java/com/lweiss01/paydirt/work`](app/src/main/java/com/lweiss01/paydirt/work)
+  Background refresh worker scaffolding
+- [`app/src/test`](app/src/test)
+  Unit tests
 
 ## Running The App
 
-### Prerequisites
+### Requirements
 
 - Android Studio
-- Android SDK installed through Android Studio
 - JDK 17
+- Android SDK installed locally
 
 ### Open In Android Studio
 
-1. Open the project root: `C:\Users\lweis\Documents\paydirt`
-2. Let Gradle sync
-3. Run the `app` configuration on an emulator or Android device
+1. Open the repo root.
+2. Let Gradle sync.
+3. Run the `app` configuration on an emulator or connected device.
 
 ### Command Line Build
 
@@ -84,37 +107,50 @@ The codebase is organized into a straightforward layered structure:
 .\gradlew.bat testDebugUnitTest
 ```
 
-## Plaid / Backend Notes
+## Backend / Plaid Notes
 
-The app includes a Plaid-ready repository and Retrofit interface, but it expects a backend to handle secure token exchange and Plaid API calls. The current debug base URL is configured in [`Modules.kt`](app/src/main/java/com/lweiss01/paydirt/di/Modules.kt).
+PayDirt includes a Plaid-ready Android-side repository and Retrofit contract, but it still expects a backend to handle sensitive token exchange and account refresh operations.
 
-Expected backend responsibilities:
+Current backend responsibilities are intended to include:
 
-- Create link tokens
-- Exchange Plaid public tokens
-- Refresh liabilities / linked account data
-- Unlink items securely
+- creating link tokens
+- exchanging public tokens
+- refreshing liabilities / linked account data
+- unlinking items securely
 
-Until the linking flow is fully wired in the Android UI, PayDirt is best treated as a strong manual-entry payoff planner with live-data infrastructure in progress.
+The current debug base URL is configured in [`Modules.kt`](app/src/main/java/com/lweiss01/paydirt/di/Modules.kt).
 
-## Roadmap
+## Roadmap And Milestones
 
-The roadmap derived from the v3 product spec lives in [`ROADMAP.md`](ROADMAP.md).
-The execution-oriented milestone checklist lives in [`MILESTONES.md`](MILESTONES.md).
+The product direction has been broken out into repo docs so the code and plan stay aligned:
 
-Short version:
+- [`ROADMAP.md`](ROADMAP.md) for phase-by-phase product direction
+- [`MILESTONES.md`](MILESTONES.md) for a build-oriented checklist
 
-- Phase 1 focuses on foundation, live data, and the reward loop
-- Phase 2 deepens retention and intelligence
-- Phase 3 adds advanced payoff tools
-- Phase 4 focuses on shipping polish and distribution
+In short:
+
+- Phase 1 is foundation, live data, and the reward loop
+- Phase 2 is intelligence and retention
+- Phase 3 is advanced payoff tooling
+- Phase 4 is launch and distribution polish
+
+## What Still Needs To Be Wired
+
+Some of the most important unfinished connections are:
+
+- reward screen integration after payment logging
+- behavior engine surfaced in the live app flow
+- onboarding flow
+- Plaid link UI and re-auth flow
+- background refresh scheduling from app startup
+- goal and momentum surfaces in the main experience
 
 ## Development Notes
 
-- Room schema export is enabled and writes to [`app/schemas`](app/schemas)
-- The repository includes both manual debt-tracking flows and early live-data scaffolding
-- The current codebase is closest to an MVP foundation plus partial Phase 1 work, not the full spec yet
+- Room schema export is enabled and written to [`app/schemas`](app/schemas)
+- The repo currently tracks both the usable manual-entry path and the in-progress live-data path
+- The codebase is honest-to-goodness app code, not a throwaway prototype, but it is still mid-build from a product perspective
 
 ## License
 
-No license file is currently present in the repository. Add one before publishing the project broadly.
+This project is licensed under the MIT License. See [`LICENSE`](LICENSE).
