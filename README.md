@@ -1,58 +1,77 @@
 # PayDirt
 
-PayDirt is an Android debt-payoff app built around one question:
+PayDirt is an Android app that helps people decide where a small extra credit card payment will do the most good.
 
-**Where should the next dollar go to do the most damage?**
+If someone has an extra $5, $10, or $25, the app should answer a simple question:
 
-Instead of making payoff planning feel like homework, PayDirt is designed to show the best move, make it easy to act on, and turn progress into something users can actually feel. The long-term product vision is a behavioral payoff loop: recommendation, action, reward, repeat.
+**Which payment creates the best payoff outcome from here?**
 
-## Why PayDirt Exists
+Debt is math, not shame. PayDirt is meant to feel calm, direct, and useful. The goal is not to flood people with dashboards or motivational language. The goal is to show the right move, explain why it matters, and make progress easier to see.
 
-Credit card payoff apps usually do one of two things:
+## What The App Does
 
-- act like spreadsheets with nicer fonts
-- push vague "stay motivated" advice without helping users make the next concrete move
+Today, the app already supports the core manual payoff-planning flow:
 
-PayDirt aims for a more useful middle ground:
+- add and edit credit cards
+- view balances, APR, and minimum payments
+- log payments
+- view card detail and payment history
+- generate payoff recommendations
+- compare avalanche, snowball, and hybrid payoff strategies
 
-- show the best target right now
-- explain the payoff in plain language
-- keep manual entry fast
-- support live account linking as the product matures
-- make momentum visible without becoming cheesy
+The longer-term product direction adds a stronger behavior loop around that core:
 
-## What The App Does Today
+- show the best next move
+- make that move easy to act on
+- reflect the payoff in concrete terms
+- bring the user back with another clear next step
 
-The current Android app already supports a solid payoff-planning core:
+## Current Status
 
-- manual card entry and editing
-- a home dashboard with total debt and a quick recommendation
-- card detail views
+This repository is a working Android app with a usable MVP foundation.
+
+What is already in place:
+
+- Jetpack Compose UI
+- Hilt dependency injection
+- Room persistence
+- home dashboard
+- optimizer flow
+- manual card management
 - payment logging
-- payoff optimization with avalanche, snowball, and hybrid strategies
-- local persistence with Room
-- dependency injection with Hilt
-- Compose-based navigation and custom UI/theme work
+- payoff engine tests
 
-The repo also includes in-progress infrastructure for:
+What is partially built or scaffolded but not fully wired into the main experience yet:
 
-- Plaid-linked account support
-- background refresh via WorkManager
-- Smart APR inference
-- reward-loop UI
-- behavior-driven retention features
+- reward screen flow
+- behavior engine surfaces
+- Plaid-linked account flow
+- background refresh scheduling
+- re-auth UX
+- onboarding flow from the product spec
 
-## Current Product Status
+## Product Direction
 
-This repository is best understood as:
+The product tone in the spec is a good summary of what PayDirt is trying to be:
 
-**A working MVP foundation with partial Phase 1 product work already in place.**
+- calm
+- direct
+- unembarrassing
+- specific
+- lightly elegant
 
-That means:
+That shows up in lines like:
 
-- the app builds and runs
-- the manual payoff planner is real and usable
-- several higher-level product systems are implemented in code but not fully wired into the main user flow yet
+- "Debt is math, not shame."
+- "Small hits, right target."
+- "Connect once. Let it run."
+
+It also means avoiding a lot of typical finance-app language:
+
+- no shame
+- no fake cheerleading
+- no streak pressure
+- no vague "take control of your future" copy
 
 ## Tech Stack
 
@@ -77,79 +96,60 @@ That means:
 - [`app/src/main/java/com/lweiss01/paydirt/ui`](app/src/main/java/com/lweiss01/paydirt/ui)
   Compose UI: screens, navigation, components, and theme
 - [`app/src/main/java/com/lweiss01/paydirt/work`](app/src/main/java/com/lweiss01/paydirt/work)
-  Background refresh worker scaffolding
+  Background refresh work
 - [`app/src/test`](app/src/test)
   Unit tests
 
 ## Running The App
 
-### Requirements
+Requirements:
 
 - Android Studio
 - JDK 17
-- Android SDK installed locally
+- local Android SDK
 
-### Open In Android Studio
-
-1. Open the repo root.
-2. Let Gradle sync.
-3. Run the `app` configuration on an emulator or connected device.
-
-### Command Line Build
+Build from the command line:
 
 ```powershell
 .\gradlew.bat :app:assembleDebug
 ```
 
-### Unit Tests
+Run unit tests:
 
 ```powershell
 .\gradlew.bat testDebugUnitTest
 ```
 
-## Backend / Plaid Notes
+## Plaid / Backend Notes
 
-PayDirt includes a Plaid-ready Android-side repository and Retrofit contract, but it still expects a backend to handle sensitive token exchange and account refresh operations.
+The Android app includes a Plaid-ready repository and API contract, but it still expects a backend to handle secure token exchange and linked-account refresh.
 
-Current backend responsibilities are intended to include:
+That backend is intended to:
 
-- creating link tokens
-- exchanging public tokens
-- refreshing liabilities / linked account data
-- unlinking items securely
+- create link tokens
+- exchange public tokens
+- refresh liabilities / linked account data
+- unlink items securely
 
 The current debug base URL is configured in [`Modules.kt`](app/src/main/java/com/lweiss01/paydirt/di/Modules.kt).
 
-## Roadmap And Milestones
+## Roadmap
 
-The product direction has been broken out into repo docs so the code and plan stay aligned:
+- [`ROADMAP.md`](ROADMAP.md) tracks the broader product phases
+- [`MILESTONES.md`](MILESTONES.md) turns that into a build checklist
 
-- [`ROADMAP.md`](ROADMAP.md) for phase-by-phase product direction
-- [`MILESTONES.md`](MILESTONES.md) for a build-oriented checklist
+The short version:
 
-In short:
-
-- Phase 1 is foundation, live data, and the reward loop
-- Phase 2 is intelligence and retention
-- Phase 3 is advanced payoff tooling
-- Phase 4 is launch and distribution polish
-
-## What Still Needs To Be Wired
-
-Some of the most important unfinished connections are:
-
-- reward screen integration after payment logging
-- behavior engine surfaced in the live app flow
-- onboarding flow
-- Plaid link UI and re-auth flow
-- background refresh scheduling from app startup
-- goal and momentum surfaces in the main experience
+- Phase 1 focuses on foundation, live data, and the reward loop
+- Phase 2 focuses on intelligence and retention
+- Phase 3 focuses on advanced payoff tools
+- Phase 4 focuses on launch polish
 
 ## Development Notes
 
 - Room schema export is enabled and written to [`app/schemas`](app/schemas)
-- The repo currently tracks both the usable manual-entry path and the in-progress live-data path
-- The codebase is honest-to-goodness app code, not a throwaway prototype, but it is still mid-build from a product perspective
+- The repo currently contains both the usable manual-entry path and the in-progress live-data path
+- The codebase is further along than a prototype, but not yet at full product-spec completion
 
 ## License
 
