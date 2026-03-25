@@ -73,6 +73,18 @@ It also means avoiding a lot of typical finance-app language:
 - no streak pressure
 - no vague "take control of your future" copy
 
+## Key Screens
+
+The current app experience centers on a few core screens:
+
+- Home: total debt, card list, and a quick recommendation
+- Card Detail: individual card progress and payment history
+- Add / Edit Card: fast manual entry for the key payoff inputs
+- Optimizer: compare payoff strategies and see the best target
+- Reward Screen: built in code and ready to be wired into the main flow
+
+Once we have stable device screenshots, this section should be replaced or expanded with images from the real app.
+
 ## Tech Stack
 
 - Kotlin
@@ -137,6 +149,7 @@ The current debug base URL is configured in [`Modules.kt`](app/src/main/java/com
 
 - [`ROADMAP.md`](ROADMAP.md) tracks the broader product phases
 - [`MILESTONES.md`](MILESTONES.md) turns that into a build checklist
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) explains how to contribute in a way that fits the product
 
 The short version:
 
