@@ -15,7 +15,7 @@ Capture work and prepare a clean handoff.
 
 ## Latest Status
 
-Committed: docs: refresh holistic status
+Committed: Revert "docs: refresh holistic status"
 
 ## Do Not Regress - Known Fixes
 

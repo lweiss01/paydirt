@@ -42,7 +42,7 @@ Capture work and prepare a clean handoff.
 
 ## Latest Work Status
 
-Committed: docs: refresh holistic status
+Committed: Revert "docs: refresh holistic status"
 
 ## What Was Tried
 
@@ -106,6 +106,6 @@ Committed: docs: refresh holistic status
 
 ## Historical Memory
 
-- Last updated: 2026-03-26T03:02:38.362Z
+- Last updated: 2026-03-26T03:04:06.338Z
 - Last handoff: None yet.
 - Pending sessions remembered: 0
