@@ -34,7 +34,7 @@ Capture work and prepare a clean handoff.
 
 ## Latest Work Status
 
-Committed: docs: refresh holistic status
+Committed: feat(M001/S05): surface home behavior and split home tabs
 
 ## What Was Tried
 
@@ -98,6 +98,6 @@ Committed: docs: refresh holistic status
 
 ## Historical Memory
 
-- Last updated: 2026-03-25T21:09:16.237Z
+- Last updated: 2026-03-26T01:27:57.993Z
 - Last handoff: None yet.
 - Pending sessions remembered: 0

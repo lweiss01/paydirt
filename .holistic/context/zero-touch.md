@@ -37,4 +37,4 @@ Zero-touch architecture exists to close the gap between the current protocol and
 - Prefer workflow-disappearance improvements over adding more visible user ceremony.
 
 Project: paydirt
-Updated: 2026-03-25T21:09:16.237Z
+Updated: 2026-03-26T01:27:57.993Z

@@ -6,7 +6,7 @@ Capture work and prepare a clean handoff.
 
 ## Latest Status
 
-Committed: docs: refresh holistic status
+Committed: feat(M001/S05): surface home behavior and split home tabs
 
 ## Planned Next Steps
 

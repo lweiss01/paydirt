@@ -7,9 +7,9 @@ This archive is the durable memory of what agents changed, why they changed it, 
 - Session: session-2026-03-25T20-57-34-270Z
 - Agent: unknown
 - Status: active
-- When: 2026-03-25T21:09:22.125Z
+- When: 2026-03-26T01:28:09.403Z
 - Goal: Capture work and prepare a clean handoff.
-- Summary: Committed: docs: refresh holistic status
+- Summary: Committed: feat(M001/S05): surface home behavior and split home tabs
 - Work done:
 - No completed work recorded.
 - Why it mattered:
