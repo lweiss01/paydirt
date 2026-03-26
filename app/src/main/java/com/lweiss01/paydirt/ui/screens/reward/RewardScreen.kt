@@ -1,143 +1,108 @@
 package com.lweiss01.paydirt.ui.screens.reward
 
-import androidx.compose.animation.*
-import androidx.compose.animation.core.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lweiss01.paydirt.domain.engine.BehaviorEngine.PaymentImpact
+import com.lweiss01.paydirt.domain.model.AprSource
 import com.lweiss01.paydirt.domain.model.MomentumScore
+import com.lweiss01.paydirt.ui.components.APRTrustBadge
+import com.lweiss01.paydirt.ui.components.aprTrustCopyForSource
 import com.lweiss01.paydirt.ui.theme.PayDirtColors
 import java.text.NumberFormat
 import java.util.Locale
+import kotlinx.coroutines.delay
 
-/**
- * RewardScreen — the highest-ROI screen in the app.
- *
- * Four-line format from the behavior spec:
- *   Line 1 (headline):   "Nice hit."
- *   Line 2 (impact):     "+$1.08 saved"
- *   Line 3 (cumulative): "$14.32 total saved"
- *   Line 4 (projection): "On track to save ~$220"
- *
- * Plus: momentum, goal progress, next opportunity loop.
- *
- * Design rules (from spec):
- * ✓ Serious and satisfying
- * ✓ Real numbers, never rounded
- * ✗ No confetti
- * ✗ No "You're amazing!!"
- * ✗ No streak pressure
- */
 @Composable
 fun RewardScreen(
     impact: PaymentImpact,
+    aprSource: AprSource,
     onPayMore: (Double) -> Unit,
     onDone: () -> Unit,
 ) {
-    // Staggered reveal animations
-    var showLine1 by remember { mutableStateOf(false) }
-    var showLine2 by remember { mutableStateOf(false) }
+    var showHero by remember { mutableStateOf(false) }
     var showStats by remember { mutableStateOf(false) }
-    var showGoal  by remember { mutableStateOf(false) }
-    var showNext  by remember { mutableStateOf(false) }
+    var showGoal by remember { mutableStateOf(false) }
+    var showNextMove by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        showLine1 = true
-        kotlinx.coroutines.delay(200)
-        showLine2 = true
-        kotlinx.coroutines.delay(300)
+        showHero = true
+        delay(180)
         showStats = true
-        kotlinx.coroutines.delay(250)
-        showGoal  = true
-        kotlinx.coroutines.delay(200)
-        showNext  = true
+        delay(160)
+        showGoal = true
+        delay(140)
+        showNextMove = true
     }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .testTag("reward_screen")
             .background(PayDirtColors.Background)
-            .padding(24.dp),
+            .padding(horizontal = 24.dp, vertical = 28.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Spacer(Modifier.height(48.dp))
+        Spacer(Modifier.height(20.dp))
 
-        // ── Line 1: Headline ──
         AnimatedVisibility(
-            visible = showLine1,
-            enter = fadeIn(tween(400)) + slideInVertically(tween(400)) { it / 2 }
+            visible = showHero,
+            enter = fadeIn(tween(300)) + slideInVertically(tween(300)) { it / 4 },
         ) {
-            Text(
-                text = impact.headlineText,
-                fontFamily = androidx.compose.ui.text.font.FontFamily.Serif,
-                fontSize = 38.sp,
-                fontWeight = FontWeight.Bold,
-                fontStyle = FontStyle.Italic,
-                color = Color.White,
-                letterSpacing = (-1).sp,
-            )
+            HeroSection(impact = impact)
         }
 
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(24.dp))
 
-        // ── Line 2: Impact ──
-        AnimatedVisibility(
-            visible = showLine2,
-            enter = fadeIn(tween(400)) + slideInVertically(tween(400)) { it / 2 }
-        ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(
-                    text = impact.displayImpact,
-                    fontSize = 44.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = PayDirtColors.Win,
-                    fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
-                    letterSpacing = (-2).sp,
-                    lineHeight = 44.sp,
-                )
-                // Scaled projection
-                if (impact.scaledProjection > 0.10) {
-                    Spacer(Modifier.height(4.dp))
-                    Text(
-                        text = "Do that ${impact.scaledProjectionReps}× → ~${
-                            formatCurrency(impact.scaledProjection)
-                        } saved",
-                        fontSize = 13.sp,
-                        color = PayDirtColors.TextSecondary,
-                        fontWeight = FontWeight.Medium,
-                    )
-                }
-            }
-        }
-
-        Spacer(Modifier.height(28.dp))
-
-        // ── Stats row: cumulative + projection + momentum ──
         AnimatedVisibility(
             visible = showStats,
-            enter = fadeIn(tween(500))
+            enter = fadeIn(tween(300)),
         ) {
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
                 RewardStatRow(
                     label = "TOTAL SAVED",
-                    value = impact.displayCumulative.removePrefix("").let {
-                        formatCurrency(impact.cumulativeSaved)
-                    },
+                    value = formatCurrency(impact.cumulativeSaved),
                     valueColor = PayDirtColors.Win,
                 )
                 RewardStatRow(
@@ -153,58 +118,102 @@ fun RewardScreen(
             }
         }
 
-        Spacer(Modifier.height(16.dp))
-
-        // ── Goal progress ──
-        AnimatedVisibility(
-            visible = showGoal && impact.monthlyGoal > 0,
-            enter = fadeIn(tween(400))
-        ) {
-            GoalProgressCard(
-                extraThisMonth = impact.extraThisMonth,
-                monthlyGoal = impact.monthlyGoal,
-                progress = impact.goalProgressAfter,
-                isAheadOfGoal = impact.isAheadOfGoal,
-            )
+        if (impact.monthlyGoal > 0) {
+            Spacer(Modifier.height(14.dp))
+            AnimatedVisibility(
+                visible = showGoal,
+                enter = fadeIn(tween(300)),
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+                    GoalProgressCard(
+                        extraThisMonth = impact.extraThisMonth,
+                        monthlyGoal = impact.monthlyGoal,
+                        progress = impact.goalProgressAfter,
+                        isAheadOfGoal = impact.isAheadOfGoal,
+                    )
+                    RewardAprTrustCard(aprSource = aprSource)
+                }
+            }
         }
 
         Spacer(Modifier.weight(1f))
 
-        // ── Next opportunity ──
         AnimatedVisibility(
-            visible = showNext,
-            enter = fadeIn(tween(500)) + slideInVertically(tween(500)) { it }
+            visible = showNextMove,
+            enter = fadeIn(tween(320)) + slideInVertically(tween(320)) { it / 3 },
         ) {
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+                verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                // Next opportunity nudge
-                if (impact.nextOpportunityInterestSaved > 0.01) {
-                    NextOpportunityCard(
-                        amount = impact.nextOpportunityAmount,
-                        interestSaved = impact.nextOpportunityInterestSaved,
-                        onTap = { onPayMore(impact.nextOpportunityAmount) }
-                    )
-                }
-
-                // Action buttons
+                NextMoveCard(impact = impact)
                 PayMoreButtons(
                     suggestedAmount = impact.nextOpportunityAmount,
+                    canPayMore = impact.nextOpportunityInterestSaved > 0.01 && impact.nextOpportunityAmount > 0.0,
                     onPayMore = onPayMore,
                     onDone = onDone,
                 )
-
-                // Footer
                 Text(
-                    text = "Small hits, right target.",
+                    text = "Result first. Next move if it helps.",
                     fontSize = 11.sp,
                     color = PayDirtColors.TextMuted,
-                    fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
-                    letterSpacing = 0.5.sp,
+                    fontFamily = FontFamily.Monospace,
+                    letterSpacing = 0.4.sp,
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                 )
-                Spacer(Modifier.height(16.dp))
+            }
+        }
+    }
+}
+
+@Composable
+private fun HeroSection(impact: PaymentImpact) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Text(
+            text = "INTEREST CUT",
+            style = MaterialTheme.typography.labelMedium,
+            color = PayDirtColors.TextMuted,
+            fontFamily = FontFamily.Monospace,
+            letterSpacing = 1.1.sp,
+        )
+        Text(
+            text = impact.displayImpact,
+            fontSize = 46.sp,
+            lineHeight = 46.sp,
+            fontWeight = FontWeight.ExtraBold,
+            color = PayDirtColors.Win,
+            fontFamily = FontFamily.Monospace,
+        )
+        Text(
+            text = impact.headlineText,
+            style = MaterialTheme.typography.titleMedium,
+            color = PayDirtColors.TextPrimary,
+            textAlign = TextAlign.Center,
+        )
+        Text(
+            text = impact.rewardBodyText,
+            style = MaterialTheme.typography.bodyMedium,
+            color = PayDirtColors.TextSecondary,
+            textAlign = TextAlign.Center,
+        )
+        if (impact.scaledProjection > 0.10) {
+            Surface(
+                shape = RoundedCornerShape(999.dp),
+                color = PayDirtColors.Surface,
+            ) {
+                Text(
+                    text = "Repeat a move like this ${impact.scaledProjectionReps}× and you save about ${formatCurrency(impact.scaledProjection)} more.",
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                    fontSize = 12.sp,
+                    color = PayDirtColors.TextSecondary,
+                    textAlign = TextAlign.Center,
+                )
             }
         }
     }
@@ -219,9 +228,9 @@ private fun RewardStatRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(12.dp))
             .background(PayDirtColors.Surface)
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+            .padding(horizontal = 16.dp, vertical = 13.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -229,13 +238,15 @@ private fun RewardStatRow(
             text = label,
             style = MaterialTheme.typography.labelSmall,
             color = PayDirtColors.TextMuted,
+            fontFamily = FontFamily.Monospace,
+            letterSpacing = 0.8.sp,
         )
         Text(
             text = value,
             fontSize = 15.sp,
             fontWeight = FontWeight.Bold,
             color = valueColor,
-            fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
+            fontFamily = FontFamily.Monospace,
         )
     }
 }
@@ -250,7 +261,8 @@ private fun GoalProgressCard(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(10.dp))
+            .testTag("reward_goal_card")
+            .clip(RoundedCornerShape(12.dp))
             .background(if (isAheadOfGoal) Color(0xFF0A1810) else PayDirtColors.Surface)
             .padding(14.dp),
     ) {
@@ -262,14 +274,19 @@ private fun GoalProgressCard(
                 text = "MONTHLY GOAL",
                 style = MaterialTheme.typography.labelSmall,
                 color = PayDirtColors.TextMuted,
+                fontFamily = FontFamily.Monospace,
             )
             Text(
-                text = if (isAheadOfGoal) "Goal hit ✓"
-                       else "${formatCurrency(extraThisMonth)} / ${formatCurrency(monthlyGoal)}",
+                text = if (isAheadOfGoal) {
+                    "Ahead • ${formatCurrency(extraThisMonth)}"
+                } else {
+                    "${formatCurrency(extraThisMonth)} of ${formatCurrency(monthlyGoal)}"
+                },
                 fontSize = 12.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = if (isAheadOfGoal) PayDirtColors.Win else PayDirtColors.TextSecondary,
-                fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
+                fontFamily = FontFamily.Monospace,
+                modifier = Modifier.testTag("reward_goal_status"),
             )
         }
         Spacer(Modifier.height(8.dp))
@@ -282,38 +299,89 @@ private fun GoalProgressCard(
             color = if (isAheadOfGoal) PayDirtColors.Win else PayDirtColors.Primary,
             trackColor = PayDirtColors.Border,
         )
+        Spacer(Modifier.height(8.dp))
+        Text(
+            text = if (isAheadOfGoal) {
+                "This payment keeps you ahead of your ${formatCurrency(monthlyGoal)} monthly extra-payment goal."
+            } else {
+                "This payment brings you to ${formatCurrency(extraThisMonth)} of your ${formatCurrency(monthlyGoal)} monthly extra-payment goal."
+            },
+            style = MaterialTheme.typography.bodySmall,
+            color = PayDirtColors.TextSecondary,
+            lineHeight = 18.sp,
+        )
     }
 }
 
 @Composable
-private fun NextOpportunityCard(
-    amount: Double,
-    interestSaved: Double,
-    onTap: () -> Unit,
-) {
-    TextButton(
-        onClick = onTap,
+private fun RewardAprTrustCard(aprSource: AprSource) {
+    val trustCopy = aprTrustCopyForSource(aprSource)
+
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(10.dp))
-            .background(Color(0xFF080E1E)),
-        contentPadding = PaddingValues(14.dp),
+            .testTag("reward_apr_trust_card")
+            .clip(RoundedCornerShape(12.dp))
+            .background(PayDirtColors.Surface)
+            .padding(14.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
+        Text(
+            text = "APR CONFIDENCE",
+            style = MaterialTheme.typography.labelSmall,
+            color = PayDirtColors.TextMuted,
+            fontFamily = FontFamily.Monospace,
+        )
+        APRTrustBadge(aprSource = aprSource)
+        Text(
+            text = trustCopy.helperText,
+            style = MaterialTheme.typography.bodySmall,
+            color = PayDirtColors.TextSecondary,
+            lineHeight = 18.sp,
+        )
+    }
+}
+
+@Composable
+private fun NextMoveCard(impact: PaymentImpact) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .background(Color(0xFF080E1E))
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Text(
+            text = "BEST NEXT MOVE",
+            style = MaterialTheme.typography.labelSmall,
+            color = PayDirtColors.TextMuted,
+            fontFamily = FontFamily.Monospace,
+            letterSpacing = 0.8.sp,
+        )
+        if (impact.nextOpportunityInterestSaved > 0.01 && impact.nextOpportunityAmount > 0.0) {
             Text(
-                text = "Another ${formatCurrency(amount)} right now saves ${formatCurrency(interestSaved)}",
-                fontSize = 13.sp,
+                text = "Another ${formatCurrency(impact.nextOpportunityAmount)} here saves about ${formatCurrency(impact.nextOpportunityInterestSaved)} more.",
+                style = MaterialTheme.typography.bodyLarge,
                 color = PayDirtColors.Accent,
-                fontWeight = FontWeight.Medium,
+                fontWeight = FontWeight.SemiBold,
             )
             Text(
-                text = "→",
-                fontSize = 16.sp,
-                color = PayDirtColors.Accent,
+                text = "It is the cleanest next payoff move from this screen — not a requirement.",
+                style = MaterialTheme.typography.bodySmall,
+                color = PayDirtColors.TextSecondary,
+            )
+        } else {
+            Text(
+                text = "You already covered the clearest next move with this payment.",
+                style = MaterialTheme.typography.bodyLarge,
+                color = PayDirtColors.TextPrimary,
+                fontWeight = FontWeight.SemiBold,
+            )
+            Text(
+                text = "Back out when you're ready. The math is already on your side.",
+                style = MaterialTheme.typography.bodySmall,
+                color = PayDirtColors.TextSecondary,
             )
         }
     }
@@ -322,61 +390,88 @@ private fun NextOpportunityCard(
 @Composable
 private fun PayMoreButtons(
     suggestedAmount: Double,
+    canPayMore: Boolean,
     onPayMore: (Double) -> Unit,
     onDone: () -> Unit,
 ) {
+    if (!canPayMore) {
+        OutlinedButton(
+            onClick = onDone,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp)
+                .testTag("reward_done_button"),
+            shape = RoundedCornerShape(12.dp),
+            colors = ButtonDefaults.outlinedButtonColors(
+                contentColor = PayDirtColors.TextSecondary,
+            ),
+            border = BorderStroke(1.dp, PayDirtColors.Border),
+        ) {
+            Text("Back to card", fontSize = 13.sp)
+        }
+        Box(modifier = Modifier.testTag("reward_pay_more_button"))
+        return
+    }
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         Button(
             onClick = { onPayMore(suggestedAmount) },
-            modifier = Modifier.weight(1f).height(48.dp),
-            shape = RoundedCornerShape(10.dp),
+            modifier = Modifier
+                .weight(1f)
+                .height(50.dp)
+                .testTag("reward_pay_more_button"),
+            shape = RoundedCornerShape(12.dp),
             colors = ButtonDefaults.buttonColors(containerColor = PayDirtColors.Primary),
+            contentPadding = PaddingValues(horizontal = 14.dp),
         ) {
             Text(
-                text = "Pay ${formatCurrency(suggestedAmount)} More",
+                text = "Use ${formatCurrency(suggestedAmount)} next",
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
             )
         }
         OutlinedButton(
             onClick = onDone,
-            modifier = Modifier.weight(1f).height(48.dp),
-            shape = RoundedCornerShape(10.dp),
+            modifier = Modifier
+                .weight(1f)
+                .height(50.dp)
+                .testTag("reward_done_button"),
+            shape = RoundedCornerShape(12.dp),
             colors = ButtonDefaults.outlinedButtonColors(
-                contentColor = PayDirtColors.TextSecondary
+                contentColor = PayDirtColors.TextSecondary,
             ),
-            border = androidx.compose.foundation.BorderStroke(1.dp, PayDirtColors.Border),
+            border = BorderStroke(1.dp, PayDirtColors.Border),
         ) {
-            Text("Done for now", fontSize = 13.sp)
+            Text("Back to card", fontSize = 13.sp)
         }
     }
 }
 
-// ─── MomentumScore display extensions ────────────────────────────────────────
+private val MomentumScore.displayLabel: String
+    get() = when (this) {
+        MomentumScore.NONE -> "—"
+        MomentumScore.BUILDING -> "Building ↑"
+        MomentumScore.STRONG -> "Strong ↑↑"
+        MomentumScore.COMPOUNDING -> "Compounding ↑↑↑"
+    }
 
-private val MomentumScore.displayLabel: String get() = when (this) {
-    MomentumScore.NONE        -> "—"
-    MomentumScore.BUILDING    -> "Building ↑"
-    MomentumScore.STRONG      -> "Strong ↑↑"
-    MomentumScore.COMPOUNDING -> "Compounding ↑↑↑"
-}
-
-private val MomentumScore.displayColor: Color get() = when (this) {
-    MomentumScore.NONE        -> PayDirtColors.TextMuted
-    MomentumScore.BUILDING    -> PayDirtColors.Warning
-    MomentumScore.STRONG      -> PayDirtColors.Accent
-    MomentumScore.COMPOUNDING -> PayDirtColors.Win
-}
-
-// ─── Formatter ───────────────────────────────────────────────────────────────
+private val MomentumScore.displayColor: Color
+    get() = when (this) {
+        MomentumScore.NONE -> PayDirtColors.TextMuted
+        MomentumScore.BUILDING -> PayDirtColors.Warning
+        MomentumScore.STRONG -> PayDirtColors.Accent
+        MomentumScore.COMPOUNDING -> PayDirtColors.Win
+    }
 
 private fun formatCurrency(amount: Double): String =
-    if (amount < 10)
+    if (amount < 10) {
         "$${String.format("%.2f", amount)}"
-    else
+    } else {
         NumberFormat.getCurrencyInstance(Locale.US).apply {
             maximumFractionDigits = 0
         }.format(amount)
+    }
