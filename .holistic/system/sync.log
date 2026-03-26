@@ -102,3 +102,47 @@ To https://github.com/lweiss01/paydirt.git
    4258bc5..5fad62a  HEAD -> refs/holistic/state
 To https://github.com/lweiss01/paydirt.git
    47a8160..f358fe1  main -> main
+warning: in the working copy of '.cursorrules', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.github/copilot-instructions.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.holistic/config.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.holistic/context/README.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.holistic/context/adapters/antigravity.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.holistic/context/adapters/claude-cowork.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.holistic/context/adapters/codex.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.holistic/context/current-plan.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.holistic/context/project-history.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.holistic/context/regression-watch.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.holistic/context/session-protocol.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.holistic/context/zero-touch.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.holistic/state.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.holistic/system/README.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.holistic/system/auto-checkpoint.ps1', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.holistic/system/auto-checkpoint.sh', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.holistic/system/holistic', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.holistic/system/restore-state.ps1', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.holistic/system/restore-state.sh', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.holistic/system/run-daemon.ps1', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.holistic/system/run-daemon.sh', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.holistic/system/sync-state.ps1', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.holistic/system/sync-state.sh', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.holistic/system/sync.log', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.windsurfrules', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'AGENTS.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'CLAUDE.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'GEMINI.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'HISTORY.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'HOLISTIC.md', LF will be replaced by CRLF the next time Git touches it
+To https://github.com/lweiss01/paydirt.git
+   5fad62a..c43754c  HEAD -> refs/holistic/state
+remote: 
+remote: Create a pull request for 'milestone/M001' on GitHub by visiting:        
+remote:      https://github.com/lweiss01/paydirt/pull/new/milestone/M001        
+remote: 
+To https://github.com/lweiss01/paydirt.git
+ * [new branch]      milestone/M001 -> milestone/M001
+To https://github.com/lweiss01/paydirt.git
+   1019dea..a07a862  milestone/M001 -> milestone/M001
+To https://github.com/lweiss01/paydirt.git
+   a07a862..2331b54  milestone/M001 -> milestone/M001
+To https://github.com/lweiss01/paydirt.git
+   f358fe1..810c249  main -> main
