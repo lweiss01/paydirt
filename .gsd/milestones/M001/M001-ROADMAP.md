@@ -49,16 +49,16 @@ This milestone is complete only when all are true:
 
 ## Slices
 
-- [ ] **S01: Reward loop wiring after payment logging** `risk:high` `depends:[]`
+- [x] **S01: Reward loop wiring after payment logging** `risk:high` `depends:[]`
   > After this: logging a payment in the live app can reach a real reward/result flow instead of ending silently in card detail.
 
-- [ ] **S02: Home progress and next-move surfaces** `risk:medium` `depends:[S01]`
+- [x] **S02: Home progress and next-move surfaces** `risk:medium` `depends:[S01]`
   > After this: home shows a clearer next move plus concrete progress signals from persisted app state.
 
-- [ ] **S03: Manual-user onboarding and first recommendation reveal** `risk:high` `depends:[S01]`
+- [x] **S03: Manual-user onboarding and first recommendation reveal** `risk:high` `depends:[S01]`
   > After this: a new manual-entry user can get to a first recommendation through a guided path instead of piecing the flow together manually.
 
-- [ ] **S04: Goal-setting and payoff framing** `risk:low` `depends:[S02,S03]`
+- [x] **S04: Goal-setting and payoff framing** `risk:low` `depends:[S02,S03]`
   > After this: users can set a payoff goal and see progress framed against it in the main loop.
 
 - [ ] **S05: Behavior engine surfaced in live UI** `risk:medium` `depends:[S02]`
