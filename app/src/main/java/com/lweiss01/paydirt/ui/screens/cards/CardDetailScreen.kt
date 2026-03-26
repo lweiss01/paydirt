@@ -8,25 +8,38 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.lweiss01.paydirt.domain.engine.BehaviorEngine
+import com.lweiss01.paydirt.domain.model.AprSource
 import com.lweiss01.paydirt.domain.model.Payment
+import com.lweiss01.paydirt.ui.components.APRTrustBadge
+import com.lweiss01.paydirt.ui.components.aprTrustCopyForSource
 import com.lweiss01.paydirt.ui.theme.PayDirtColors
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,12 +47,44 @@ fun CardDetailScreen(
     cardId: Long,
     onBack: () -> Unit,
     onEdit: () -> Unit,
+    onRewardReady: (BehaviorEngine.PaymentImpact, AprSource) -> Unit = { _, _ -> },
+    suggestedPaymentAmount: Double? = null,
+    onSuggestedPaymentHandled: () -> Unit = {},
+    forceClosePaymentSheet: Boolean = false,
+    onForceClosePaymentSheetHandled: () -> Unit = {},
     viewModel: CardDetailViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
     var showPaymentSheet by remember { mutableStateOf(false) }
+    var paymentSheetDefaultAmount by remember { mutableStateOf(0.0) }
 
     LaunchedEffect(cardId) { viewModel.loadCard(cardId) }
+
+    LaunchedEffect(viewModel, cardId) {
+        viewModel.events.collect { event ->
+            when (event) {
+                is CardDetailEvent.RewardReady -> if (event.cardId == cardId) {
+                    onRewardReady(event.impact, state.card?.aprSource ?: AprSource.UNKNOWN)
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(suggestedPaymentAmount) {
+        if (suggestedPaymentAmount != null) {
+            paymentSheetDefaultAmount = suggestedPaymentAmount
+            showPaymentSheet = true
+            onSuggestedPaymentHandled()
+        }
+    }
+
+    LaunchedEffect(forceClosePaymentSheet) {
+        if (forceClosePaymentSheet) {
+            showPaymentSheet = false
+            paymentSheetDefaultAmount = 0.0
+            onForceClosePaymentSheetHandled()
+        }
+    }
 
     Scaffold(
         containerColor = PayDirtColors.Background,
@@ -61,10 +106,14 @@ fun CardDetailScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { showPaymentSheet = true },
+                onClick = {
+                    paymentSheetDefaultAmount = state.card?.minPayment ?: 0.0
+                    showPaymentSheet = true
+                },
                 containerColor = PayDirtColors.Win,
                 contentColor = Color.Black,
-                shape = CircleShape
+                shape = CircleShape,
+                modifier = Modifier.testTag("card_detail_log_payment_fab")
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Log Payment")
             }
@@ -87,6 +136,7 @@ fun CardDetailScreen(
                 val cardColor = PayDirtColors.CardColors.getOrElse(card.colorTag) { PayDirtColors.Primary }
                 val progress = if (card.originalBalance > 0)
                     (1.0 - card.currentBalance / card.originalBalance).toFloat().coerceIn(0f, 1f) else 0f
+                val aprTrustCopy = aprTrustCopyForSource(card.aprSource)
 
                 Card(
                     shape = RoundedCornerShape(16.dp),
@@ -94,13 +144,25 @@ fun CardDetailScreen(
                 ) {
                     Column(modifier = Modifier.padding(20.dp)) {
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                            Column {
+                            Column(modifier = Modifier.weight(1f)) {
                                 Text("CURRENT BALANCE", style = MaterialTheme.typography.labelSmall)
                                 Text(formatCurrency(card.currentBalance), fontSize = 32.sp, fontWeight = FontWeight.ExtraBold, color = PayDirtColors.TextPrimary)
                             }
-                            Column(horizontalAlignment = Alignment.End) {
-                                Text("APR", style = MaterialTheme.typography.labelSmall)
-                                Text("${card.apr}%", fontSize = 22.sp, fontWeight = FontWeight.Bold, color = PayDirtColors.Danger)
+                            Column(
+                                horizontalAlignment = Alignment.End,
+                                verticalArrangement = Arrangement.spacedBy(8.dp),
+                                modifier = Modifier.widthIn(max = 220.dp)
+                            ) {
+                                Text("APR CONFIDENCE", style = MaterialTheme.typography.labelSmall)
+                                APRTrustBadge(aprSource = card.aprSource)
+                                Text(
+                                    text = aprTrustCopy.helperText,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontSize = 12.sp,
+                                    lineHeight = 18.sp,
+                                    color = PayDirtColors.TextSecondary,
+                                    textAlign = androidx.compose.ui.text.style.TextAlign.End,
+                                )
                             }
                         }
                         Spacer(Modifier.height(16.dp))
@@ -146,14 +208,16 @@ fun CardDetailScreen(
     }
 
     if (showPaymentSheet) {
-        LogPaymentSheet(
-            defaultAmount = state.card?.minPayment ?: 0.0,
-            onDismiss = { showPaymentSheet = false },
-            onConfirm = { amount, isExtra, note ->
-                viewModel.logPayment(cardId, amount, isExtra, note)
-                showPaymentSheet = false
-            }
-        )
+        key(paymentSheetDefaultAmount) {
+            LogPaymentSheet(
+                defaultAmount = paymentSheetDefaultAmount,
+                onDismiss = { showPaymentSheet = false },
+                onConfirm = { amount, isExtra, note ->
+                    viewModel.logPayment(cardId, amount, isExtra, note)
+                    showPaymentSheet = false
+                }
+            )
+        }
     }
 }
 
@@ -193,7 +257,7 @@ private fun LogPaymentSheet(
     onDismiss: () -> Unit,
     onConfirm: (Double, Boolean, String?) -> Unit
 ) {
-    var amount by remember { mutableStateOf("%.0f".format(defaultAmount)) }
+    var amount by remember(defaultAmount) { mutableStateOf("%.0f".format(defaultAmount)) }
     var isExtra by remember { mutableStateOf(false) }
     var note by remember { mutableStateOf("") }
 
@@ -205,7 +269,9 @@ private fun LogPaymentSheet(
                 value = amount, onValueChange = { amount = it },
                 label = { Text("Amount ($)") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("card_detail_payment_amount_input"),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = PayDirtColors.Primary, unfocusedBorderColor = PayDirtColors.Border,
                     focusedTextColor = PayDirtColors.TextPrimary, unfocusedTextColor = PayDirtColors.TextPrimary,
@@ -219,8 +285,12 @@ private fun LogPaymentSheet(
                     Text("This is an extra payment", style = MaterialTheme.typography.titleMedium)
                     Text("Above the minimum", style = MaterialTheme.typography.bodyMedium, fontSize = 12.sp)
                 }
-                Switch(checked = isExtra, onCheckedChange = { isExtra = it },
-                    colors = SwitchDefaults.colors(checkedThumbColor = Color.White, checkedTrackColor = PayDirtColors.Win))
+                Switch(
+                    checked = isExtra,
+                    onCheckedChange = { isExtra = it },
+                    modifier = Modifier.testTag("card_detail_payment_extra_switch"),
+                    colors = SwitchDefaults.colors(checkedThumbColor = Color.White, checkedTrackColor = PayDirtColors.Win)
+                )
             }
 
             OutlinedTextField(
@@ -240,7 +310,10 @@ private fun LogPaymentSheet(
                     val amt = amount.toDoubleOrNull() ?: return@Button
                     onConfirm(amt, isExtra, note)
                 },
-                modifier = Modifier.fillMaxWidth().height(52.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(52.dp)
+                    .testTag("card_detail_payment_submit"),
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = PayDirtColors.Win)
             ) {

@@ -64,10 +64,10 @@ This milestone is complete only when all are true:
 - [ ] **S05: Behavior engine surfaced in live UI** `risk:medium` `depends:[S02]`
   > After this: momentum, payoff impact, and next-opportunity signals show up in real app surfaces instead of remaining latent in domain code.
 
-- [ ] **S06: APR confidence and trust cues** `risk:low` `depends:[S02,S03]`
+- [x] **S06: APR confidence and trust cues** `risk:low` `depends:[S02,S03]`
   > After this: recommendation-related UI communicates confidence and ambiguity honestly where it matters.
 
-- [ ] **S07: Core flow polish and verification** `risk:medium` `depends:[S01,S02,S03,S04,S05,S06]`
+- [x] **S07: Core flow polish and verification** `risk:medium` `depends:[S01,S02,S03,S04,S05,S06]`
   > After this: the manual path works cleanly from entry to recommendation to payment log to updated progress, with verification evidence that the assembled loop holds together.
 
 ## Boundary Map
