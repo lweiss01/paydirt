@@ -26,6 +26,14 @@ Open repo, start working, Holistic quietly keeps continuity alive.
 
 That is the intended end state for this project. Prefer changes that reduce ceremony, keep continuity durable, and make Holistic fade further into the background of normal work.
 
+## Known Fixes - Do Not Regress
+
+⚠️  If you are about to edit a file listed here, STOP and read the fix entry first.
+
+- S07 reward done return now lands on plain card detail instead of reopening the payment sheet or breaking the app flow
+  Sensitive files: .gsd/worktrees/M001/app/src/main/java/com/lweiss01/paydirt/ui/navigation/NavGraph.kt,.gsd/worktrees/M001/app/src/main/java/com/lweiss01/paydirt/ui/screens/cards/CardDetailScreen.kt,.gsd/worktrees/M001/.gsd/milestones/M001/slices/S07/S07-SUMMARY.md,.gsd/worktrees/M001/.gsd/milestones/M001/slices/S07/S07-UAT.md,.gsd/worktrees/M001/.gsd/milestones/M001/M001-ROADMAP.md
+  Risk: collapsing reward done and pay-more into one return path, or moving reward payload cleanup away from card-detail return handling
+
 ## Current Objective
 
 **Capture work and prepare a clean handoff.**
@@ -34,7 +42,7 @@ Capture work and prepare a clean handoff.
 
 ## Latest Work Status
 
-Committed: chore(M001/S05): auto-commit after research-slice
+Committed: fix(M001/S07): verify assembled loop and fix reward return
 
 ## What Was Tried
 
@@ -68,29 +76,13 @@ Committed: chore(M001/S05): auto-commit after research-slice
 ## Changed Files In Current Session
 
 - .bg-shell/manifest.json
-- .gsd/worktrees/M001/.gradle/9.2.1/checksums/checksums.lock
-- .gsd/worktrees/M001/.gradle/9.2.1/executionHistory/executionHistory.bin
-- .gsd/worktrees/M001/.gradle/9.2.1/executionHistory/executionHistory.lock
-- .gsd/worktrees/M001/.gradle/9.2.1/fileChanges/last-build.bin
-- .gsd/worktrees/M001/.gradle/9.2.1/fileHashes/fileHashes.bin
-- .gsd/worktrees/M001/.gradle/9.2.1/fileHashes/fileHashes.lock
-- .gsd/worktrees/M001/.gradle/9.2.1/fileHashes/resourceHashesCache.bin
-- .gsd/worktrees/M001/.gradle/buildOutputCleanup/buildOutputCleanup.lock
-- .gsd/worktrees/M001/.gradle/buildOutputCleanup/outputFiles.bin
-- .gsd/worktrees/M001/.gradle/file-system.probe
-- .gsd/worktrees/M001/.gradle/kotlin/errors/errors-1774487671667.log
-- .gsd/worktrees/M001/.gsd/milestones/M001/M001-ROADMAP.md
-- .gsd/worktrees/M001/.gsd/milestones/M001/slices/S05/S05-PLAN.md
-- .gsd/worktrees/M001/.gsd/milestones/M001/slices/S05/S05-SUMMARY.md
-- .gsd/worktrees/M001/.gsd/milestones/M001/slices/S05/S05-UAT.md
-- .gsd/worktrees/M001/.kotlin/errors/errors-1774487671666.log
-- .gsd/worktrees/M001/app/src/main/java/com/lweiss01/paydirt/ui/screens/home/HomeScreen.kt
-- .gsd/worktrees/M001/app/src/main/java/com/lweiss01/paydirt/ui/screens/home/HomeViewModel.kt
-- .gsd/worktrees/M001/app/src/test/java/com/lweiss01/paydirt/ui/screens/home/HomeViewModelTest.kt
-- .gsd/worktrees/M001/tmp/paydirt-ui-cards-tab.xml
-- .gsd/worktrees/M001/tmp/paydirt-ui-scrolled.xml
-- .gsd/worktrees/M001/tmp/paydirt-ui-tabs.xml
-- .gsd/worktrees/M001/tmp/paydirt-ui.xml
+- .gsd/milestones/M001/M001-ROADMAP.md
+- .gsd/milestones/M001/slices/S07/S07-PLAN.md
+- .gsd/milestones/M001/slices/S07/S07-SUMMARY.md
+- .gsd/milestones/M001/slices/S07/S07-UAT.md
+- app/src/androidTest/java/com/lweiss01/paydirt/ui/navigation/ManualLoopFlowTest.kt
+- app/src/main/java/com/lweiss01/paydirt/ui/navigation/NavGraph.kt
+- app/src/main/java/com/lweiss01/paydirt/ui/screens/cards/CardDetailScreen.kt
 
 ## Pending Work Queue
 
@@ -121,6 +113,6 @@ Committed: chore(M001/S05): auto-commit after research-slice
 
 ## Historical Memory
 
-- Last updated: 2026-03-26T00:52:58.199Z
+- Last updated: 2026-03-26T03:01:22.696Z
 - Last handoff: None yet.
 - Pending sessions remembered: 0
