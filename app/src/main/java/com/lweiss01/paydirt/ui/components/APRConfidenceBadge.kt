@@ -1,13 +1,31 @@
 package com.lweiss01.paydirt.ui.components
 
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -16,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lweiss01.paydirt.domain.engine.SmartAPREngine
+import com.lweiss01.paydirt.domain.model.AprSource
 import com.lweiss01.paydirt.ui.theme.PayDirtColors
 
 /**
@@ -67,7 +86,6 @@ fun APRConfidenceBadge(
     var showDetail by remember { mutableStateOf(false) }
 
     Column(modifier = modifier) {
-        // ── Main badge ──
         Row(
             modifier = Modifier
                 .clip(RoundedCornerShape(8.dp))
@@ -75,9 +93,12 @@ fun APRConfidenceBadge(
                 .border(1.dp, borderColor, RoundedCornerShape(8.dp))
                 .then(
                     if (estimate.confidence != SmartAPREngine.Confidence.HIGH ||
-                        estimate.dataPointsUsed != -1)
+                        estimate.dataPointsUsed != -1
+                    ) {
                         Modifier.clickable { showDetail = !showDetail }
-                    else Modifier
+                    } else {
+                        Modifier
+                    }
                 )
                 .padding(horizontal = 10.dp, vertical = 6.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -115,7 +136,6 @@ fun APRConfidenceBadge(
             }
         }
 
-        // ── Expandable detail panel ──
         AnimatedVisibility(
             visible = showDetail,
             enter = expandVertically() + fadeIn(),
@@ -126,8 +146,11 @@ fun APRConfidenceBadge(
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp))
                     .background(PayDirtColors.Surface)
-                    .border(1.dp, PayDirtColors.Border,
-                        RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp))
+                    .border(
+                        1.dp,
+                        PayDirtColors.Border,
+                        RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp)
+                    )
                     .padding(14.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
@@ -137,7 +160,6 @@ fun APRConfidenceBadge(
                     color = PayDirtColors.Primary
                 )
 
-                // Monthly data points
                 if (estimate.monthlyEstimates.isNotEmpty()) {
                     estimate.monthlyEstimates
                         .filter { !it.isOutlier }
@@ -154,7 +176,6 @@ fun APRConfidenceBadge(
                     }
                 }
 
-                // Notes
                 estimate.notes.take(2).forEach { note ->
                     Text(
                         "• $note",
@@ -164,10 +185,10 @@ fun APRConfidenceBadge(
                     )
                 }
 
-                // Confirm CTA
                 if (onConfirmTap != null &&
-                    estimate.confidence != SmartAPREngine.Confidence.INSUFFICIENT) {
-                    Spacer(Modifier.height(2.dp))
+                    estimate.confidence != SmartAPREngine.Confidence.INSUFFICIENT
+                ) {
+                    Spacer(Modifier.width(2.dp))
                     TextButton(
                         onClick = onConfirmTap,
                         contentPadding = PaddingValues(0.dp)
@@ -226,7 +247,65 @@ private data class ConfidenceStyle(
     val label: String
 )
 
-// ─── Convenience composable for card list rows ────────────────────────────────
+data class AprTrustCopy(
+    val badgeLabel: String,
+    val helperText: String,
+)
+
+internal fun aprTrustCopyForSource(aprSource: AprSource): AprTrustCopy = when (aprSource) {
+    AprSource.USER -> AprTrustCopy(
+        badgeLabel = "APR confirmed",
+        helperText = "This recommendation is using the APR you entered for this card."
+    )
+    AprSource.PLAID -> AprTrustCopy(
+        badgeLabel = "APR confirmed",
+        helperText = "This recommendation is using APR data synced from your linked account."
+    )
+    AprSource.INFERRED -> AprTrustCopy(
+        badgeLabel = "APR estimated",
+        helperText = "This recommendation is directionally useful, but the APR was inferred from account history."
+    )
+    AprSource.UNKNOWN -> AprTrustCopy(
+        badgeLabel = "APR not confirmed",
+        helperText = "This recommendation may sharpen once you add the exact APR from a statement."
+    )
+}
+
+@Composable
+fun APRTrustBadge(
+    aprSource: AprSource,
+    modifier: Modifier = Modifier,
+) {
+    val copy = aprTrustCopyForSource(aprSource)
+    val (background, border, text) = when (aprSource) {
+        AprSource.USER, AprSource.PLAID -> Triple(
+            PayDirtColors.WinMuted,
+            PayDirtColors.WinBorder,
+            PayDirtColors.Win,
+        )
+        AprSource.INFERRED -> Triple(
+            Color(0xFF1A1A0F),
+            Color(0xFF3A3A1A),
+            PayDirtColors.Warning,
+        )
+        AprSource.UNKNOWN -> Triple(
+            PayDirtColors.SurfaceVariant,
+            PayDirtColors.Border,
+            PayDirtColors.TextSecondary,
+        )
+    }
+
+    Text(
+        text = copy.badgeLabel,
+        color = text,
+        style = MaterialTheme.typography.labelSmall,
+        modifier = modifier
+            .clip(RoundedCornerShape(999.dp))
+            .background(background)
+            .border(1.dp, border, RoundedCornerShape(999.dp))
+            .padding(horizontal = 10.dp, vertical = 6.dp)
+    )
+}
 
 /**
  * Compact inline APR display for use in card summary rows.
@@ -239,8 +318,8 @@ fun InlineAPRChip(
 ) {
     val (text, color) = when (estimate.confidence) {
         SmartAPREngine.Confidence.HIGH ->
-            (if (estimate.dataPointsUsed == -1) "${estimate.estimatedAPR}%" 
-             else "~${estimate.estimatedAPR}%") to PayDirtColors.Win
+            (if (estimate.dataPointsUsed == -1) "${estimate.estimatedAPR}%"
+            else "~${estimate.estimatedAPR}%") to PayDirtColors.Win
         SmartAPREngine.Confidence.MEDIUM ->
             "~${estimate.estimatedAPR}%" to PayDirtColors.Warning
         SmartAPREngine.Confidence.LOW ->

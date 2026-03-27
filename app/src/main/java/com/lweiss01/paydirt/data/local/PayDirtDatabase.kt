@@ -1,25 +1,35 @@
 package com.lweiss01.paydirt.data.local
 
-import androidx.room.migration.Migration
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.lweiss01.paydirt.data.local.dao.CardDao
+import com.lweiss01.paydirt.data.local.dao.GoalSettingsDao
 import com.lweiss01.paydirt.data.local.dao.LinkedAccountDao
 import com.lweiss01.paydirt.data.local.dao.PaymentDao
 import com.lweiss01.paydirt.data.local.entity.CardEntity
+import com.lweiss01.paydirt.data.local.entity.DEFAULT_MONTHLY_GOAL
+import com.lweiss01.paydirt.data.local.entity.GOAL_SETTINGS_SINGLETON_ID
+import com.lweiss01.paydirt.data.local.entity.GoalSettingsEntity
 import com.lweiss01.paydirt.data.local.entity.LinkedAccountEntity
 import com.lweiss01.paydirt.data.local.entity.PaymentEntity
 
 @Database(
-    entities = [CardEntity::class, PaymentEntity::class, LinkedAccountEntity::class],
-    version = 2,
+    entities = [
+        CardEntity::class,
+        PaymentEntity::class,
+        LinkedAccountEntity::class,
+        GoalSettingsEntity::class,
+    ],
+    version = 3,
     exportSchema = true,
 )
 abstract class PayDirtDatabase : RoomDatabase() {
     abstract fun cardDao(): CardDao
     abstract fun paymentDao(): PaymentDao
     abstract fun linkedAccountDao(): LinkedAccountDao
+    abstract fun goalSettingsDao(): GoalSettingsDao
 
     companion object {
         const val DATABASE_NAME = "paydirt.db"
@@ -49,6 +59,22 @@ abstract class PayDirtDatabase : RoomDatabase() {
                         consentExpiresAt INTEGER
                     )
                     """.trimIndent()
+                )
+            }
+        }
+
+        val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    """
+                    CREATE TABLE IF NOT EXISTS goal_settings (
+                        id INTEGER NOT NULL PRIMARY KEY,
+                        monthlyGoal REAL NOT NULL
+                    )
+                    """.trimIndent()
+                )
+                db.execSQL(
+                    "INSERT OR IGNORE INTO goal_settings (id, monthlyGoal) VALUES ($GOAL_SETTINGS_SINGLETON_ID, $DEFAULT_MONTHLY_GOAL)"
                 )
             }
         }

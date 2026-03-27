@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.lweiss01.paydirt.data.local.PayDirtDatabase
 import com.lweiss01.paydirt.data.local.dao.CardDao
+import com.lweiss01.paydirt.data.local.dao.GoalSettingsDao
 import com.lweiss01.paydirt.data.local.dao.LinkedAccountDao
 import com.lweiss01.paydirt.data.local.dao.PaymentDao
 import com.lweiss01.paydirt.data.remote.PlaidApiService
@@ -31,7 +32,10 @@ object DatabaseModule {
             PayDirtDatabase::class.java,
             PayDirtDatabase.DATABASE_NAME,
         )
-            .addMigrations(PayDirtDatabase.MIGRATION_1_2)
+            .addMigrations(
+                PayDirtDatabase.MIGRATION_1_2,
+                PayDirtDatabase.MIGRATION_2_3,
+            )
             .build()
 
     @Provides
@@ -42,6 +46,9 @@ object DatabaseModule {
 
     @Provides
     fun provideLinkedAccountDao(db: PayDirtDatabase): LinkedAccountDao = db.linkedAccountDao()
+
+    @Provides
+    fun provideGoalSettingsDao(db: PayDirtDatabase): GoalSettingsDao = db.goalSettingsDao()
 }
 
 @Module

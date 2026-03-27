@@ -2,6 +2,8 @@ package com.lweiss01.paydirt.data.local.dao
 
 import androidx.room.*
 import com.lweiss01.paydirt.data.local.entity.CardEntity
+import com.lweiss01.paydirt.data.local.entity.GOAL_SETTINGS_SINGLETON_ID
+import com.lweiss01.paydirt.data.local.entity.GoalSettingsEntity
 import com.lweiss01.paydirt.data.local.entity.PaymentEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -91,4 +93,17 @@ interface PaymentDao {
 
     @Query("DELETE FROM payments WHERE id = :id")
     suspend fun deletePaymentById(id: Long)
+}
+
+@Dao
+interface GoalSettingsDao {
+
+    @Query("SELECT * FROM goal_settings WHERE id = :id")
+    fun observeGoalSettings(id: Long = GOAL_SETTINGS_SINGLETON_ID): Flow<GoalSettingsEntity?>
+
+    @Query("SELECT * FROM goal_settings WHERE id = :id")
+    suspend fun getGoalSettings(id: Long = GOAL_SETTINGS_SINGLETON_ID): GoalSettingsEntity?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsertGoalSettings(settings: GoalSettingsEntity)
 }

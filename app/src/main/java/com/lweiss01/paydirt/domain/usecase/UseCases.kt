@@ -1,14 +1,17 @@
 package com.lweiss01.paydirt.domain.usecase
 
 import com.lweiss01.paydirt.data.repository.CardRepository
+import com.lweiss01.paydirt.data.repository.GoalSettingsRepository
 import com.lweiss01.paydirt.data.repository.PaymentRepository
 import com.lweiss01.paydirt.domain.engine.PayoffEngine
 import com.lweiss01.paydirt.domain.model.Card
 import com.lweiss01.paydirt.domain.model.CardPayoffDetail
+import com.lweiss01.paydirt.domain.model.HomePaymentSummary
 import com.lweiss01.paydirt.domain.model.Payment
 import com.lweiss01.paydirt.domain.model.PayoffPlan
 import java.util.Calendar
 import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
 
 class GetCardsUseCase @Inject constructor(
     private val cardRepository: CardRepository
@@ -57,6 +60,28 @@ class GetPaymentsForCardUseCase @Inject constructor(
 ) {
     operator fun invoke(cardId: Long) =
         paymentRepository.getPaymentsForCard(cardId)
+}
+
+class GetHomePaymentSummaryUseCase @Inject constructor(
+    private val paymentRepository: PaymentRepository
+) {
+    operator fun invoke(): Flow<HomePaymentSummary> =
+        paymentRepository.getHomePaymentSummary()
+}
+
+class GetMonthlyGoalUseCase @Inject constructor(
+    private val goalSettingsRepository: GoalSettingsRepository,
+) {
+    operator fun invoke(): Flow<Double> = goalSettingsRepository.observeMonthlyGoal()
+
+    suspend fun current(): Double = goalSettingsRepository.getMonthlyGoal()
+}
+
+class UpdateMonthlyGoalUseCase @Inject constructor(
+    private val goalSettingsRepository: GoalSettingsRepository,
+) {
+    suspend operator fun invoke(monthlyGoal: Double) =
+        goalSettingsRepository.updateMonthlyGoal(monthlyGoal)
 }
 
 class CalculatePayoffPlanUseCase @Inject constructor(

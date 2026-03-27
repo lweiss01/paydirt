@@ -58,6 +58,14 @@ data class Payment(
     val paidAt: Long = System.currentTimeMillis()
 )
 
+data class HomePaymentSummary(
+    val recentPayments: List<Payment>,
+    val totalExtraPayments: Double,
+    val extraThisMonth: Double,
+    val paymentCountThisMonth: Int,
+    val lastPaymentAmount: Double?,
+)
+
 data class PayoffPlan(
     val cards: List<CardPayoffDetail>,
     val totalMonths: Int,

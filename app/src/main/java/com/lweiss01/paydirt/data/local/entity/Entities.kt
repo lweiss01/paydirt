@@ -5,6 +5,9 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
+const val GOAL_SETTINGS_SINGLETON_ID = 1L
+const val DEFAULT_MONTHLY_GOAL = 50.0
+
 @Entity(tableName = "cards")
 data class CardEntity(
     @PrimaryKey(autoGenerate = true)
@@ -61,4 +64,11 @@ data class LinkedAccountEntity(
     val lastRefreshed: Long? = null,
     val needsReauth: Boolean = false,
     val consentExpiresAt: Long? = null,
+)
+
+@Entity(tableName = "goal_settings")
+data class GoalSettingsEntity(
+    @PrimaryKey
+    val id: Long = GOAL_SETTINGS_SINGLETON_ID,
+    val monthlyGoal: Double = DEFAULT_MONTHLY_GOAL,
 )

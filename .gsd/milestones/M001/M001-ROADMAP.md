@@ -61,7 +61,7 @@ This milestone is complete only when all are true:
 - [x] **S04: Goal-setting and payoff framing** `risk:low` `depends:[S02,S03]`
   > After this: users can set a payoff goal and see progress framed against it in the main loop.
 
-- [ ] **S05: Behavior engine surfaced in live UI** `risk:medium` `depends:[S02]`
+- [x] **S05: Behavior engine surfaced in live UI** `risk:medium` `depends:[S02]`
   > After this: momentum, payoff impact, and next-opportunity signals show up in real app surfaces instead of remaining latent in domain code.
 
 - [x] **S06: APR confidence and trust cues** `risk:low` `depends:[S02,S03]`
