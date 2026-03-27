@@ -1,4 +1,4 @@
-# Codex Adapter
+# GitHub Copilot Adapter
 
 ## Product North Star
 
@@ -8,8 +8,8 @@ Use this adapter to move toward that outcome: less manual setup, less re-briefin
 
 ## Tool-Specific Notes
 
-- Codex is usually repo-instruction driven, so the first prompt matters more than custom app hooks.
-- Prefer explicit Holistic recap commands before large context shifts or fresh chat starts.
+- Copilot should pick up repo guidance from `.github/copilot-instructions.md` alongside the shared Holistic docs.
+- Keep Holistic as the continuity layer and Copilot instructions as the tool-specific behavior layer.
 
 ## Startup Contract
 
@@ -20,12 +20,11 @@ Use this adapter to move toward that outcome: less manual setup, less re-briefin
 5. Recap the current state for the user in the first 30 seconds.
 6. Ask: continue as planned, tweak the plan, or start something new.
 
-### Startup Notes For Codex
+### Startup Notes For GitHub Copilot
 
-- Use the repo-local resume helper early in a fresh Codex chat so the recap lands before implementation starts.
-- If the chat is already deep, checkpoint first before asking Codex to compact or pivot.
+- Review `.github/copilot-instructions.md` after the Holistic recap so Copilot gets both continuity and local coding rules.
 
-Use the repo-local Holistic helper in this repo: Windows `.\.holistic\system\holistic.cmd resume --agent codex`; macOS/Linux `./.holistic/system/holistic resume --agent codex`.
+Use the repo-local Holistic helper in this repo: Windows `.\.holistic\system\holistic.cmd resume --agent copilot`; macOS/Linux `./.holistic/system/holistic resume --agent copilot`.
 
 ## Checkpoint Contract
 
@@ -38,9 +37,9 @@ Use the repo-local Holistic helper for checkpoints in this repo when:
 
 Include impact notes and regression risks when they matter.
 
-### Checkpoint Notes For Codex
+### Checkpoint Notes For GitHub Copilot
 
-- Checkpoint before asking Codex to refactor broadly or touch multiple subsystems in one pass.
+- Checkpoint after multi-file edits so Copilot sessions do not lose why a change set exists.
 
 Use the repo-local Holistic helper in this repo: Windows `.\.holistic\system\holistic.cmd checkpoint --reason "<what changed>"`; macOS/Linux `./.holistic/system/holistic checkpoint --reason "<what changed>"`.
 
@@ -49,9 +48,9 @@ Use the repo-local Holistic helper in this repo: Windows `.\.holistic\system\hol
 - Preferred: map your session-end workflow to the repo-local Holistic helper with `handoff`
 - Fallback: ask the user to run the repo-local Holistic helper with `handoff` before leaving the session
 
-### Handoff Notes For Codex
+### Handoff Notes For GitHub Copilot
 
-- Treat the handoff as the durable replacement for a long final Codex recap message.
+- End with a real handoff instead of relying on editor chat history surviving between Copilot sessions.
 
 Use the repo-local Holistic helper in this repo: Windows `.\.holistic\system\holistic.cmd handoff`; macOS/Linux `./.holistic/system/holistic handoff`.
 

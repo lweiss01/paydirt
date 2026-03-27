@@ -4,8 +4,6 @@ REMOTE='origin'
 STATE_REF='refs/holistic/state'
 LEGACY_SEED_REF='refs/heads/holistic/state'
 if [ -z "$REMOTE" ]; then echo 'holistic sync-state: ERROR: no remote configured. Re-run holistic init --remote <remote>.' >&2; exit 1; fi
-BRANCH=$(git -c core.hooksPath=/dev/null -C "$ROOT" rev-parse --abbrev-ref HEAD) || exit 1
-git -c core.hooksPath=/dev/null -C "$ROOT" push "$REMOTE" "$BRANCH" || exit 1
 TMPDIR=$(mktemp -d 2>/dev/null || mktemp -d -t holistic-state)
 git -c core.hooksPath=/dev/null -C "$ROOT" worktree add --force "$TMPDIR" >/dev/null 2>&1 || exit 1
 cleanup() { git -c core.hooksPath=/dev/null -C "$ROOT" worktree remove --force "$TMPDIR" >/dev/null 2>&1; }

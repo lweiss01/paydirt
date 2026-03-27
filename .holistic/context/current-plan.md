@@ -6,7 +6,7 @@ Capture work and prepare a clean handoff.
 
 ## Latest Status
 
-Committed: Revert "docs: refresh holistic status"
+Committed: fix(M001/S05): recover home behavior loop on main
 
 ## Planned Next Steps
 

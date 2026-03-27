@@ -1,4 +1,4 @@
-# Codex Adapter
+# Gemini Adapter
 
 ## Product North Star
 
@@ -8,8 +8,8 @@ Use this adapter to move toward that outcome: less manual setup, less re-briefin
 
 ## Tool-Specific Notes
 
-- Codex is usually repo-instruction driven, so the first prompt matters more than custom app hooks.
-- Prefer explicit Holistic recap commands before large context shifts or fresh chat starts.
+- Gemini should use repo-visible docs first: `HOLISTIC.md`, `GEMINI.md`, and the Holistic context folder.
+- Treat `GEMINI.md` as the app-local companion to the shared Holistic memory.
 
 ## Startup Contract
 
@@ -20,12 +20,11 @@ Use this adapter to move toward that outcome: less manual setup, less re-briefin
 5. Recap the current state for the user in the first 30 seconds.
 6. Ask: continue as planned, tweak the plan, or start something new.
 
-### Startup Notes For Codex
+### Startup Notes For Gemini
 
-- Use the repo-local resume helper early in a fresh Codex chat so the recap lands before implementation starts.
-- If the chat is already deep, checkpoint first before asking Codex to compact or pivot.
+- Open with the shared Holistic recap, then align Gemini-specific behavior from `GEMINI.md`.
 
-Use the repo-local Holistic helper in this repo: Windows `.\.holistic\system\holistic.cmd resume --agent codex`; macOS/Linux `./.holistic/system/holistic resume --agent codex`.
+Use the repo-local Holistic helper in this repo: Windows `.\.holistic\system\holistic.cmd resume --agent gemini`; macOS/Linux `./.holistic/system/holistic resume --agent gemini`.
 
 ## Checkpoint Contract
 
@@ -38,9 +37,9 @@ Use the repo-local Holistic helper for checkpoints in this repo when:
 
 Include impact notes and regression risks when they matter.
 
-### Checkpoint Notes For Codex
+### Checkpoint Notes For Gemini
 
-- Checkpoint before asking Codex to refactor broadly or touch multiple subsystems in one pass.
+- Checkpoint when Gemini is about to pivot from research to edits or from one subsystem to another.
 
 Use the repo-local Holistic helper in this repo: Windows `.\.holistic\system\holistic.cmd checkpoint --reason "<what changed>"`; macOS/Linux `./.holistic/system/holistic checkpoint --reason "<what changed>"`.
 
@@ -49,9 +48,9 @@ Use the repo-local Holistic helper in this repo: Windows `.\.holistic\system\hol
 - Preferred: map your session-end workflow to the repo-local Holistic helper with `handoff`
 - Fallback: ask the user to run the repo-local Holistic helper with `handoff` before leaving the session
 
-### Handoff Notes For Codex
+### Handoff Notes For Gemini
 
-- Treat the handoff as the durable replacement for a long final Codex recap message.
+- Use the handoff to leave a crisp resume point for the next non-Gemini agent too, not just Gemini.
 
 Use the repo-local Holistic helper in this repo: Windows `.\.holistic\system\holistic.cmd handoff`; macOS/Linux `./.holistic/system/holistic handoff`.
 

@@ -5,9 +5,6 @@ $remote = 'origin'
 $stateRef = 'refs/holistic/state'
 $legacySeedRef = 'refs/heads/holistic/state'
 if (-not $remote) { Write-Error 'holistic sync-state: ERROR: no remote configured. Re-run holistic init --remote <remote>.'; exit 1 }
-$branch = git -c core.hooksPath=NUL -C $root rev-parse --abbrev-ref HEAD
-if ($LASTEXITCODE -ne 0) { throw 'Unable to determine current branch.' }
-git -c core.hooksPath=NUL -C $root push $remote $branch
 $tmp = Join-Path $env:TEMP ('holistic-state-' + [guid]::NewGuid().ToString())
 git -c core.hooksPath=NUL -C $root worktree add --force $tmp | Out-Null
 try {

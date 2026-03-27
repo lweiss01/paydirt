@@ -1,0 +1,70 @@
+{
+  "id": "session-2026-03-25T20-57-34-270Z",
+  "agent": "unknown",
+  "branch": "main",
+  "startedAt": "2026-03-25T20:57:34.270Z",
+  "updatedAt": "2026-03-26T03:09:52.872Z",
+  "endedAt": "2026-03-26T03:09:52.873Z",
+  "status": "handed_off",
+  "title": "Capture work and prepare a clean handoff.",
+  "currentGoal": "Capture work and prepare a clean handoff.",
+  "currentPlan": [
+    "Read HOLISTIC.md",
+    "Confirm next step with the user"
+  ],
+  "latestStatus": "Committed: Revert \"docs: refresh holistic status\"",
+  "workDone": [
+    "Synced S06 APR trust work and S07 assembled-loop reward-return fix onto main, reverted Holistic-only commits from GitHub, deleted remote milestone/M001 branch, and left local main clean."
+  ],
+  "triedItems": [
+    "Cherry-picked verified S06 and S07 commits from milestone/M001 onto main",
+    "reverted Holistic-only GitHub commits",
+    "deleted remote milestone/M001 branch",
+    "restored local main to clean state"
+  ],
+  "nextSteps": [
+    "Start M002 planning from main",
+    "generate new milestone ID",
+    "review current requirements and roadmap before implementation"
+  ],
+  "assumptions": [
+    "Push to GitHub should mean main unless the user explicitly asks for a branch",
+    "milestone/M001 is closed out and removed remotely",
+    "next work starts from main with a fresh M002 milestone"
+  ],
+  "blockers": [
+    "Android 16 connected Espresso tests fail with InputManager.getInstance NoSuchMethodException on the attached device, so manual runtime proof remains the truthful verification path there"
+  ],
+  "references": [
+    ".gsd/milestones/M001/slices/S06/S06-SUMMARY.md",
+    ".gsd/milestones/M001/slices/S06/S06-UAT.md",
+    ".gsd/milestones/M001/slices/S07/S07-SUMMARY.md",
+    ".gsd/milestones/M001/slices/S07/S07-UAT.md",
+    ".gsd/milestones/M001/M001-ROADMAP.md"
+  ],
+  "impactNotes": [
+    "Main branch now contains the verified S06 trust work and S07 assembled-loop fix",
+    "GitHub no longer shows the milestone/M001 compare prompt",
+    "repo is ready to start M002 from main"
+  ],
+  "regressionRisks": [
+    "[FIX] S07 reward done return now lands on plain card detail instead of reopening the payment sheet or breaking the app flow | files: .gsd/worktrees/M001/app/src/main/java/com/lweiss01/paydirt/ui/navigation/NavGraph.kt,.gsd/worktrees/M001/app/src/main/java/com/lweiss01/paydirt/ui/screens/cards/CardDetailScreen.kt,.gsd/worktrees/M001/.gsd/milestones/M001/slices/S07/S07-SUMMARY.md,.gsd/worktrees/M001/.gsd/milestones/M001/slices/S07/S07-UAT.md,.gsd/worktrees/M001/.gsd/milestones/M001/M001-ROADMAP.md | risk: collapsing reward done and pay-more into one return path, or moving reward payload cleanup away from card-detail return handling",
+    "Avoid collapsing reward done and pay-more into one return path",
+    "avoid moving reward payload cleanup away from card-detail return handling",
+    "treat Android 16 connected-test InputManager failure as environment-specific unless reproduced as app behavior"
+  ],
+  "changedFiles": [
+    ".bg-shell/manifest.json"
+  ],
+  "checkpointCount": 62,
+  "lastCheckpointReason": "S06 and S07 synced to main; remote milestone branch removed; session closing with repo aligned to main and ready to start M002 next",
+  "resumeRecap": [
+    "Current objective: Capture work and prepare a clean handoff.",
+    "Latest status: Committed: Revert \"docs: refresh holistic status\"",
+    "Already tried: Cherry-picked verified S06 and S07 commits from milestone/M001 onto main; reverted Holistic-only GitHub commits; deleted remote milestone/M001 branch; restored local main to clean state",
+    "Try next: Start M002 planning from main; generate new milestone ID; review current requirements and roadmap before implementation",
+    "Overall impact so far: Main branch now contains the verified S06 trust work and S07 assembled-loop fix; GitHub no longer shows the milestone/M001 compare prompt; repo is ready to start M002 from main",
+    "Regression watch: [FIX] S07 reward done return now lands on plain card detail instead of reopening the payment sheet or breaking the app flow | files: .gsd/worktrees/M001/app/src/main/java/com/lweiss01/paydirt/ui/navigation/NavGraph.kt,.gsd/worktrees/M001/app/src/main/java/com/lweiss01/paydirt/ui/screens/cards/CardDetailScreen.kt,.gsd/worktrees/M001/.gsd/milestones/M001/slices/S07/S07-SUMMARY.md,.gsd/worktrees/M001/.gsd/milestones/M001/slices/S07/S07-UAT.md,.gsd/worktrees/M001/.gsd/milestones/M001/M001-ROADMAP.md | risk: collapsing reward done and pay-more into one return path, or moving reward payload cleanup away from card-detail return handling; Avoid collapsing reward done and pay-more into one return path; avoid moving reward payload cleanup away from card-detail return handling; treat Android 16 connected-test InputManager failure as environment-specific unless reproduced as app behavior",
+    "Blockers: Android 16 connected Espresso tests fail with InputManager.getInstance NoSuchMethodException on the attached device, so manual runtime proof remains the truthful verification path there"
+  ]
+}

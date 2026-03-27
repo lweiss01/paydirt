@@ -12,8 +12,8 @@
 - To record a fix that must not regress: `holistic checkpoint --fixed '<bug>' --fix-files '<file>' --fix-risk '<what reintroduces it>'`
 
 **At the end of every session:**
-- Run `holistic handoff` - this opens a dialog to capture the summary.
-- Then commit: `git add HOLISTIC.md AGENTS.md CLAUDE.md GEMINI.md HISTORY.md .holistic/ && git commit -m 'docs(holistic): handoff'`
+- Run `holistic handoff` - this opens a dialog to capture the summary and prepares a pending handoff commit.
+- If you want the Holistic files committed, make that git commit explicitly.
 
 **Never touch files listed in the KNOWN FIXES section of HOLISTIC.md without reading that section first.**
 

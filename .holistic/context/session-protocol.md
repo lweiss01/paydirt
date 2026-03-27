@@ -35,8 +35,9 @@ Use the repo-local Holistic helper in this repo: Windows `.\.holistic\system\hol
 1. Use the repo-local Holistic helper to run `handoff`.
 2. Confirm or edit the drafted summary.
 3. Make sure the next step, impact, and regression risks are accurate.
-4. Let Holistic write the docs and create the handoff commit.
-5. Holistic sync helpers should push the current branch and mirror portable state to the dedicated portable state ref.
-6. If you continue on another device, pull or restore the latest portable state before starting work.
+4. Let Holistic write the docs and prepare the handoff commit.
+5. If you want the handoff docs committed, make that git commit explicitly.
+6. Holistic sync helpers should mirror portable state to the dedicated portable state ref without pushing your working branch.
+7. If you continue on another device, pull or restore the latest portable state before starting work.
 
 Use the repo-local Holistic helper in this repo: Windows `.\.holistic\system\holistic.cmd handoff`; macOS/Linux `./.holistic/system/holistic handoff`.

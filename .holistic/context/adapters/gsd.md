@@ -1,4 +1,4 @@
-# Codex Adapter
+# GSD Adapter
 
 ## Product North Star
 
@@ -8,8 +8,8 @@ Use this adapter to move toward that outcome: less manual setup, less re-briefin
 
 ## Tool-Specific Notes
 
-- Codex is usually repo-instruction driven, so the first prompt matters more than custom app hooks.
-- Prefer explicit Holistic recap commands before large context shifts or fresh chat starts.
+- GSD has its own planning and workflow artifacts; Holistic should complement them, not replace them.
+- Use Holistic for cross-agent continuity and GSD for execution structure inside a session.
 
 ## Startup Contract
 
@@ -20,12 +20,11 @@ Use this adapter to move toward that outcome: less manual setup, less re-briefin
 5. Recap the current state for the user in the first 30 seconds.
 6. Ask: continue as planned, tweak the plan, or start something new.
 
-### Startup Notes For Codex
+### Startup Notes For GSD
 
-- Use the repo-local resume helper early in a fresh Codex chat so the recap lands before implementation starts.
-- If the chat is already deep, checkpoint first before asking Codex to compact or pivot.
+- Start from the Holistic recap, then align against any active GSD milestone, slice, or task files.
 
-Use the repo-local Holistic helper in this repo: Windows `.\.holistic\system\holistic.cmd resume --agent codex`; macOS/Linux `./.holistic/system/holistic resume --agent codex`.
+Use the repo-local Holistic helper in this repo: Windows `.\.holistic\system\holistic.cmd resume --agent gsd`; macOS/Linux `./.holistic/system/holistic resume --agent gsd`.
 
 ## Checkpoint Contract
 
@@ -38,9 +37,9 @@ Use the repo-local Holistic helper for checkpoints in this repo when:
 
 Include impact notes and regression risks when they matter.
 
-### Checkpoint Notes For Codex
+### Checkpoint Notes For GSD
 
-- Checkpoint before asking Codex to refactor broadly or touch multiple subsystems in one pass.
+- Checkpoint when a GSD slice changes direction or when work crosses from one task context into another.
 
 Use the repo-local Holistic helper in this repo: Windows `.\.holistic\system\holistic.cmd checkpoint --reason "<what changed>"`; macOS/Linux `./.holistic/system/holistic checkpoint --reason "<what changed>"`.
 
@@ -49,9 +48,9 @@ Use the repo-local Holistic helper in this repo: Windows `.\.holistic\system\hol
 - Preferred: map your session-end workflow to the repo-local Holistic helper with `handoff`
 - Fallback: ask the user to run the repo-local Holistic helper with `handoff` before leaving the session
 
-### Handoff Notes For Codex
+### Handoff Notes For GSD
 
-- Treat the handoff as the durable replacement for a long final Codex recap message.
+- Keep the handoff focused on what the next agent needs to resume, even if fuller detail exists in GSD artifacts.
 
 Use the repo-local Holistic helper in this repo: Windows `.\.holistic\system\holistic.cmd handoff`; macOS/Linux `./.holistic/system/holistic handoff`.
 
