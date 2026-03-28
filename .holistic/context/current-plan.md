@@ -6,7 +6,7 @@ Capture work and prepare a clean handoff.
 
 ## Latest Status
 
-Committed: fix(M001/S05): recover home behavior loop on main
+Committed: docs(M001): record S08 live-pass evidence and milestone closeout
 
 ## Planned Next Steps
 

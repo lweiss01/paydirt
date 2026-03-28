@@ -7,9 +7,9 @@ This archive is the durable memory of what agents changed, why they changed it, 
 - Session: session-2026-03-27T02-11-53-263Z
 - Agent: unknown
 - Status: active
-- When: 2026-03-27T02:12:11.465Z
+- When: 2026-03-28T18:34:30.682Z
 - Goal: Capture work and prepare a clean handoff.
-- Summary: Committed: fix(M001/S05): recover home behavior loop on main
+- Summary: Committed: docs(M001): record S08 live-pass evidence and milestone closeout
 - Work done:
 - No completed work recorded.
 - Why it mattered:

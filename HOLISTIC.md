@@ -34,7 +34,7 @@ Capture work and prepare a clean handoff.
 
 ## Latest Work Status
 
-Committed: fix(M001/S05): recover home behavior loop on main
+Committed: docs(M001): record S08 live-pass evidence and milestone closeout
 
 ## What Was Tried
 
@@ -68,6 +68,20 @@ Committed: fix(M001/S05): recover home behavior loop on main
 ## Changed Files In Current Session
 
 - .bg-shell/manifest.json
+- .gradle/9.2.1/checksums/checksums.lock
+- .gradle/9.2.1/executionHistory/executionHistory.bin
+- .gradle/9.2.1/executionHistory/executionHistory.lock
+- .gradle/9.2.1/fileChanges/last-build.bin
+- .gradle/9.2.1/fileHashes/fileHashes.bin
+- .gradle/9.2.1/fileHashes/fileHashes.lock
+- .gradle/9.2.1/fileHashes/resourceHashesCache.bin
+- .gradle/buildOutputCleanup/buildOutputCleanup.lock
+- .gradle/buildOutputCleanup/outputFiles.bin
+- .gradle/file-system.probe
+- hs_err_pid10640.log
+- hs_err_pid4440.log
+- replay_pid10640.log
+- replay_pid4440.log
 
 ## Pending Work Queue
 
@@ -99,6 +113,6 @@ Committed: fix(M001/S05): recover home behavior loop on main
 
 ## Historical Memory
 
-- Last updated: 2026-03-27T02:11:53.368Z
+- Last updated: 2026-03-28T18:32:03.912Z
 - Last handoff: __GSD_EXIT_dd4837e4__=$?
 - Pending sessions remembered: 1
