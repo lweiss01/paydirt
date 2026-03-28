@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -19,7 +20,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lweiss01.paydirt.ui.theme.PayDirtColors
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -109,7 +112,11 @@ fun AddEditCardScreen(
                 onClick = {
                     scope.launch {
                         val saved = viewModel.save(cardId)
-                        if (saved) onSaved()
+                        if (saved) {
+                            withContext(Dispatchers.Main.immediate) {
+                                onSaved()
+                            }
+                        }
                     }
                 },
                 enabled = state.isValid && !state.isSaving,
@@ -133,15 +140,16 @@ private fun PayDirtTextField(
     value: String,
     onValueChange: (String) -> Unit,
     placeholder: String = "",
-    isNumeric: Boolean = false
+    isNumeric: Boolean = false,
+    modifier: Modifier = Modifier
 ) {
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
         label = { Text(label) },
         placeholder = { Text(placeholder, color = PayDirtColors.TextDisabled) },
-        modifier = Modifier.fillMaxWidth(),
-        keyboardOptions = if (isNumeric) KeyboardOptions(keyboardType = KeyboardType.Decimal) else KeyboardOptions.Default,
+        modifier = modifier.fillMaxWidth(),
+        keyboardOptions = if (isNumeric) KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Done) else KeyboardOptions.Default,
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = PayDirtColors.Primary,
             unfocusedBorderColor = PayDirtColors.Border,
