@@ -68,20 +68,6 @@ Committed: docs(M001): record S08 live-pass evidence and milestone closeout
 ## Changed Files In Current Session
 
 - .bg-shell/manifest.json
-- .gradle/9.2.1/checksums/checksums.lock
-- .gradle/9.2.1/executionHistory/executionHistory.bin
-- .gradle/9.2.1/executionHistory/executionHistory.lock
-- .gradle/9.2.1/fileChanges/last-build.bin
-- .gradle/9.2.1/fileHashes/fileHashes.bin
-- .gradle/9.2.1/fileHashes/fileHashes.lock
-- .gradle/9.2.1/fileHashes/resourceHashesCache.bin
-- .gradle/buildOutputCleanup/buildOutputCleanup.lock
-- .gradle/buildOutputCleanup/outputFiles.bin
-- .gradle/file-system.probe
-- hs_err_pid10640.log
-- hs_err_pid4440.log
-- replay_pid10640.log
-- replay_pid4440.log
 
 ## Pending Work Queue
 
@@ -113,6 +99,6 @@ Committed: docs(M001): record S08 live-pass evidence and milestone closeout
 
 ## Historical Memory
 
-- Last updated: 2026-03-28T18:32:03.912Z
+- Last updated: 2026-03-28T18:34:30.723Z
 - Last handoff: __GSD_EXIT_dd4837e4__=$?
 - Pending sessions remembered: 1

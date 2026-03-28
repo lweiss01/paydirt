@@ -23,27 +23,13 @@ _Append-only log of every Holistic session. Newest entries at the bottom._
 
 ---
 
-## Session `session-2026-03-27T02-11-53-263Z` | 2026-03-28T18:34:30.682Z | unknown
+## Session `session-2026-03-27T02-11-53-263Z` | 2026-03-28T18:34:35.366Z | unknown
 
 **Branch:** `main`  
 **Status:** active  
 **Goal:** Capture work and prepare a clean handoff.  
-**Checkpoints:** 13
+**Checkpoints:** 14
 
 **Files changed:**
 - `.bg-shell/manifest.json`
-- `.gradle/9.2.1/checksums/checksums.lock`
-- `.gradle/9.2.1/executionHistory/executionHistory.bin`
-- `.gradle/9.2.1/executionHistory/executionHistory.lock`
-- `.gradle/9.2.1/fileChanges/last-build.bin`
-- `.gradle/9.2.1/fileHashes/fileHashes.bin`
-- `.gradle/9.2.1/fileHashes/fileHashes.lock`
-- `.gradle/9.2.1/fileHashes/resourceHashesCache.bin`
-- `.gradle/buildOutputCleanup/buildOutputCleanup.lock`
-- `.gradle/buildOutputCleanup/outputFiles.bin`
-- `.gradle/file-system.probe`
-- `hs_err_pid10640.log`
-- `hs_err_pid4440.log`
-- `replay_pid10640.log`
-- `replay_pid4440.log`
 
